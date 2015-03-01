@@ -248,8 +248,8 @@ int main(void)
     problem.phases(1).bounds.lower.events(3) = 0.0;
     problem.phases(1).bounds.lower.events(4) = 0.0;
 
-    problem.phases(1).bounds.lower.events(5) = pi;
-    problem.phases(1).bounds.lower.events(6) = -0.5 * pi;
+    problem.phases(1).bounds.lower.events(5) = 0.5 * pi;
+    problem.phases(1).bounds.lower.events(6) = 0.0;
     problem.phases(1).bounds.lower.events(7) = 0.0;
     problem.phases(1).bounds.lower.events(8) = 0.0;
 
@@ -301,7 +301,7 @@ int main(void)
 
     algorithm.nlp_method                  = "IPOPT";
     algorithm.scaling                     = "automatic";
-    algorithm.derivatives                 = "automatic";
+    algorithm.derivatives                 = "numerical"; //"automatic";
     algorithm.nlp_iter_max                = 1000;
     algorithm.nlp_tolerance               = 1.e-6;
 

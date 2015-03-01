@@ -25,7 +25,9 @@ axis(2 * [-1 1 -1 1]);
 for i = 1:length(time)
     plot([0 X1(i)], [0 Y1(i)]);
     plot([X1(i) X2(i)], [Y1(i) Y2(i)]);
-    pause(0.05);
+    pause(0.10);
     cla;
 end
+plot([0 X1(i)], [0 Y1(i)]);
+plot([X1(i) X2(i)], [Y1(i) Y2(i)]);
 
