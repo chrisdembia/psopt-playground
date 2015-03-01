@@ -58,7 +58,17 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
     adouble theta2 = states[ CINDEX(2) ];
     adouble theta1dot = states[ CINDEX(3) ];
     adouble theta2dot = states[ CINDEX(4) ];
+    adouble tau1 = controls[ CINDEX(1) ];
+    adouble tau2 = controls[ CINDEX(2) ];
+    
+    derivatives[ CINDEX(1) ] = theta1dot;
+    derivatives[ CINDEX(2) ] = theta2dot;
 
+    derivatives[ CINDEX(3) ] = (2*L2*tau1 - 2*L2*tau2 - cos(theta2)*(2*L1*tau2 - 2*pow(L1,2)*L2*m2*pow(theta1dot,2)*sin(theta2)) - 2*pow(L2,2)*g*m2 + 2*pow(L2,2)*g*m2*cos(theta1 + theta2) + 2*L1*pow(L2,2)*m2*pow(theta1dot,2)*sin(theta2) + 2*L1*pow(L2,2)*m2*pow(theta2dot,2)*sin(theta2) - 2*L1*L2*g*m1*cos(theta1) - L1*L2*g*m2*cos(theta1) + L1*L2*g*m2*cos(theta1 + 2*theta2) + 4*L1*pow(L2,2)*m2*theta1dot*theta2dot*sin(theta2))/(L2*(2*pow(L1,2)*m1 + 2*pow(L1,2)*m2 - 2*pow(L1,2)*m2*pow(cos(theta2),2)));
+    
+    derivatives[ CINDEX(4) ] = -(2*pow(L2,2)*m2*tau1 - 2*pow(L1,2)*m1*tau2 - 2*pow(L1,2)*m2*tau2 - 2*pow(L2,3)*g*pow(m2,2) - 2*pow(L2,2)*m2*tau2 + 2*pow(L2,3)*g*pow(m2,2)*cos(theta1 + theta2) + pow(L1,2)*L2*g*pow(m2,2)*cos(theta1 + theta2) - 2*L1*pow(L2,2)*g*pow(m2,2)*cos(theta2) - pow(L1,2)*L2*g*pow(m2,2)*cos(theta1 - theta2) + 2*L1*pow(L2,2)*g*pow(m2,2)*cos(theta1 + 2*theta2) + 2*pow(L1,2)*pow(L2,2)*pow(m2,2)*pow(theta1dot,2)*sin(2*theta2) + pow(L1,2)*pow(L2,2)*pow(m2,2)*pow(theta2dot,2)*sin(2*theta2) + 2*L1*L2*m2*tau1*cos(theta2) - 4*L1*L2*m2*tau2*cos(theta2) + 2*L1*pow(L2,3)*pow(m2,2)*pow(theta1dot,2)*sin(theta2) + 2*pow(L1,3)*L2*pow(m2,2)*pow(theta1dot,2)*sin(theta2) + 2*L1*pow(L2,3)*pow(m2,2)*pow(theta2dot,2)*sin(theta2) + pow(L1,2)*L2*g*m1*m2*cos(theta1 + theta2) - 2*L1*pow(L2,2)*g*m1*m2*cos(theta1) - pow(L1,2)*L2*g*m1*m2*cos(theta1 - theta2) + 2*pow(L1,2)*pow(L2,2)*pow(m2,2)*theta1dot*theta2dot*sin(2*theta2) + 2*pow(L1,3)*L2*m1*m2*pow(theta1dot,2)*sin(theta2) + 4*L1*pow(L2,3)*pow(m2,2)*theta1dot*theta2dot*sin(theta2))/(pow(L2,2)*m2*(2*pow(L1,2)*m1 + pow(L1,2)*m2 - pow(L1,2)*m2*cos(2*theta2)));
+
+    /*
     adouble c1 = cos(theta1);
     adouble s2 = sin(theta2);
     adouble c2 = cos(theta2);
@@ -80,6 +90,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
     derivatives[ CINDEX(2) ] = theta2dot;
     derivatives[ CINDEX(3) ] = theta1dotdot_numerator / theta1dotdot_denominator;
     derivatives[ CINDEX(4) ] = theta2dotdot_numerator / theta2dotdot_denominator;
+    */
 
    /*
     adouble z1 = m2 * L1 * L2 * c2;
@@ -179,7 +190,7 @@ int main(void)
 
     problem.name        		= "Two link robotic arm";
 
-    problem.outfilename                 = "twolink.txt";
+    problem.outfilename                 = "mytwolink.txt";
 
 ////////////////////////////////////////////////////////////////////////////
 ////////////  Define problem level constants & do level 1 setup ////////////
@@ -199,7 +210,7 @@ int main(void)
     problem.phases(1).ncontrols 		= 2;
     problem.phases(1).nevents   		= 8;
     problem.phases(1).npath     		= 0;
-    problem.phases(1).nodes                     = 40;  
+    problem.phases(1).nodes             = 40;  
 
     psopt_level2_setup(problem, algorithm);
   
@@ -215,30 +226,32 @@ int main(void)
 ///////////////////  Enter problem bounds information //////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
-    problem.phases(1).bounds.lower.states(1) = -2.0;
-    problem.phases(1).bounds.lower.states(2) = -2.0;
-    problem.phases(1).bounds.lower.states(3) = -2.0;
-    problem.phases(1).bounds.lower.states(4) = -2.0;
+    double pi = 3.14159;
+    problem.phases(1).bounds.lower.states(1) = -pi;
+    problem.phases(1).bounds.lower.states(2) = -pi;
+    problem.phases(1).bounds.lower.states(3) = -100 * pi;
+    problem.phases(1).bounds.lower.states(4) = -100 * pi;
 
-    problem.phases(1).bounds.upper.states(1) = 2.0;
-    problem.phases(1).bounds.upper.states(2) = 2.0;
-    problem.phases(1).bounds.upper.states(3) = 2.0;
-    problem.phases(1).bounds.upper.states(4) = 2.0;
+    problem.phases(1).bounds.upper.states(1) = pi;
+    problem.phases(1).bounds.upper.states(2) = pi;
+    problem.phases(1).bounds.upper.states(3) = 100 * pi;
+    problem.phases(1).bounds.upper.states(4) = 100 * pi;
 
-    problem.phases(1).bounds.lower.controls(1) = -1.0;
-    problem.phases(1).bounds.lower.controls(2) = -1.0;
+    problem.phases(1).bounds.lower.controls(1) = -1000.0;
+    problem.phases(1).bounds.lower.controls(2) = -1000.0;
 
-    problem.phases(1).bounds.upper.controls(1) = 1.0;
-    problem.phases(1).bounds.upper.controls(2) = 1.0;
+    problem.phases(1).bounds.upper.controls(1) = 1000.0;
+    problem.phases(1).bounds.upper.controls(2) = 1000.0;
 
     problem.phases(1).bounds.lower.events(1) = 0.0;
     problem.phases(1).bounds.lower.events(2) = 0.0;
-    problem.phases(1).bounds.lower.events(3) = 0.5;
+    problem.phases(1).bounds.lower.events(3) = 0.0;
     problem.phases(1).bounds.lower.events(4) = 0.0;
-    problem.phases(1).bounds.lower.events(5) = 0.0;
-    problem.phases(1).bounds.lower.events(6) = 0.0;
-    problem.phases(1).bounds.lower.events(7) = 0.5;
-    problem.phases(1).bounds.lower.events(8) = 0.522;
+
+    problem.phases(1).bounds.lower.events(5) = pi;
+    problem.phases(1).bounds.lower.events(6) = -0.5 * pi;
+    problem.phases(1).bounds.lower.events(7) = 0.0;
+    problem.phases(1).bounds.lower.events(8) = 0.0;
 
     problem.phases(1).bounds.upper.events = problem.phases(1).bounds.lower.events;
 
@@ -271,10 +284,10 @@ int main(void)
 
     DMatrix x0(4,40);
 
-    x0(1,colon()) = linspace(0.0,0.0, 40);
-    x0(2,colon()) = linspace(0.0,0.0, 40);
-    x0(3,colon()) = linspace(0.5,0.5, 40);
-    x0(4,colon()) = linspace(0.522,0.522, 40);
+    x0(1,colon()) = linspace(0.0, pi, 40);
+    x0(2,colon()) = linspace(0.0, -0.5 * pi, 40);
+    x0(3,colon()) = linspace(0.0, 0.0, 40);
+    x0(4,colon()) = linspace(0.0, 0.0, 40);
 
     problem.phases(1).guess.controls       = zeros(1,40);
     problem.phases(1).guess.states         = x0;
