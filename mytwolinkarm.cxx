@@ -260,7 +260,7 @@ int main(void)
     problem.phases(1).bounds.lower.StartTime    = 0.0;
     problem.phases(1).bounds.upper.StartTime    = 0.0;
 
-    problem.phases(1).bounds.lower.EndTime      = 1.0;
+    problem.phases(1).bounds.lower.EndTime      = 0.0;
     problem.phases(1).bounds.upper.EndTime      = 10.0;
 
 
@@ -282,16 +282,17 @@ int main(void)
 ////////////////////////////////////////////////////////////////////////////
 
 
-    DMatrix x0(4,40);
+    int N = 100;
+    DMatrix x0(4,N);
 
-    x0(1,colon()) = linspace(0.0, pi, 40);
-    x0(2,colon()) = linspace(0.0, -0.5 * pi, 40);
-    x0(3,colon()) = linspace(0.0, 0.0, 40);
-    x0(4,colon()) = linspace(0.0, 0.0, 40);
+    x0(1,colon()) = linspace(0.0, pi, N);
+    x0(2,colon()) = linspace(0.0, -0.5 * pi, N);
+    x0(3,colon()) = linspace(0.0, 0.0, N);
+    x0(4,colon()) = linspace(0.0, 0.0, N);
 
-    problem.phases(1).guess.controls       = zeros(1,40);
+    problem.phases(1).guess.controls       = zeros(1,N);
     problem.phases(1).guess.states         = x0;
-    problem.phases(1).guess.time           = linspace(0.0, 3.0, 40); 
+    problem.phases(1).guess.time           = linspace(0.0, 3.0, N); 
 
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////  Enter algorithm options  //////////////////////////////
@@ -331,6 +332,7 @@ int main(void)
 ///////////  Plot some results if desired (requires gnuplot) ///////////////
 ////////////////////////////////////////////////////////////////////////////
 
+    /*
     plot(t,x,problem.name + ": states", "time (s)", "states", "x1 x2 x3 x4");
 
     plot(t,u,problem.name + ": controls", "time (s)", "controls", "u1 u2");
@@ -341,6 +343,7 @@ int main(void)
 
     plot(t,u,problem.name + ": controls", "time (s)", "controls", "u1 u2", 
                               "pdf", "twolinkarm_controls.pdf");
+    */
 
 
 }
