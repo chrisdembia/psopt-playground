@@ -407,7 +407,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
     problem.phases(1).bounds.lower.events(4) = 0.0;
 
     problem.phases(1).bounds.lower.events(5) = 0.5 * pi;
-    problem.phases(1).bounds.lower.events(6) = 0.0;
+    problem.phases(1).bounds.lower.events(6) = 0.0 * pi;
     problem.phases(1).bounds.lower.events(7) = 0.0;
     problem.phases(1).bounds.lower.events(8) = 0.0;
 
@@ -429,7 +429,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
 
     problem.integrand_cost 	= &integrand_cost;
     problem.endpoint_cost 	= &endpoint_cost;
-    problem.dae 		= &dae_down;
+    problem.dae 		= &dae_opensim;
     problem.events 		= &events;
     problem.linkages		= &linkages;
 
@@ -444,7 +444,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
     DMatrix x0(4,N);
 
     x0(1,colon()) = linspace(0.0, 0.5 * pi, N);
-    x0(2,colon()) = linspace(0.0, 0.0, N);
+    x0(2,colon()) = linspace(0.0, 0.0 * pi, N);
     x0(3,colon()) = linspace(0.0, 0.0, N);
     x0(4,colon()) = linspace(0.0, 0.0, N);
 
