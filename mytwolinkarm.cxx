@@ -17,6 +17,9 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "psopt.h"
+#include "opensimtwolink.h"
+
+TwoLink* opensimTwoLink;
 
 //////////////////////////////////////////////////////////////////////////
 ///////////////////  Define the end point (Mayer) cost function //////////
@@ -44,10 +47,39 @@ adouble integrand_cost(adouble* states, adouble* controls,
 ///////////////////  Define the DAE's ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
+void dae_opensim(adouble* derivatives, adouble* path, adouble* states, 
+         adouble* controls, adouble* parameters, adouble& time, 
+         adouble* xad, int iphase)
+{
+    double dderivatives[4];
+    double dstates[4];
+    double dcontrols[2];
+    double dtime;
+    trace_on(100);
+    for (int i = 0; i < 4; ++i) {
+        states[i] >>= dstates[i];
+    }
+    for (int i = 0; i < 2; ++i) {
+        controls[i] >>= dcontrols[i];
+    }
+    time >>= dtime;
+
+    opensimTwoLink->dae(dderivatives, NULL, dstates, 
+         dcontrols, NULL, dtime, 
+         NULL, iphase);
+
+    for (int i = 0; i < 4; ++i) {
+        derivatives[i] <<= dderivatives[i];
+    }
+
+    trace_off();
+}
+
 void dae(adouble* derivatives, adouble* path, adouble* states, 
          adouble* controls, adouble* parameters, adouble& time, 
          adouble* xad, int iphase)
 {
+
     adouble g = 9.81;
     adouble L1 = 1;
     adouble L2 = 1;
@@ -175,6 +207,43 @@ void linkages( adouble* linkages, adouble* xad)
 
 int main(void)
 {
+    double pi = 3.14159;
+
+    opensimTwoLink = new TwoLink();
+
+    adouble states[4] = {0, pi, 0, 0};
+    adouble derivatives[4];
+    adouble* path = NULL;
+    adouble* parameters = NULL;
+    adouble time = 0;
+    adouble* xad = NULL;
+    adouble controls[2] = {0, 0};
+
+    dae_opensim(derivatives, path, states, controls, parameters, time, xad, 1);
+
+    std::cout << "OPENSIM: ";
+    for (int i = 0; i < 4; ++i) {
+        std::cout << derivatives[i] << " ";
+    }
+    std::cout << std::endl;
+
+    //
+    adouble aderivatives[4];
+    dae(aderivatives, path, states, controls, parameters, time, xad, 1);
+
+    std::cout << "ADOL: ";
+    for (int i = 0; i < 4; ++i) {
+        std::cout << aderivatives[i] << " ";
+    }
+    std::cout << std::endl;
+
+
+    return 0;
+    /*
+void dae(adouble* derivatives, adouble* path, adouble* states, 
+         adouble* controls, adouble* parameters, adouble& time, 
+         adouble* xad, int iphase)
+         */
 
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////  Declare key structures ////////////////////////////////
@@ -226,7 +295,6 @@ int main(void)
 ///////////////////  Enter problem bounds information //////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
-    double pi = 3.14159;
     problem.phases(1).bounds.lower.states(1) = -pi;
     problem.phases(1).bounds.lower.states(2) = -pi;
     problem.phases(1).bounds.lower.states(3) = -100 * pi;
@@ -282,7 +350,7 @@ int main(void)
 ////////////////////////////////////////////////////////////////////////////
 
 
-    int N = 100;
+    int N = 40;
     DMatrix x0(4,N);
 
     x0(1,colon()) = linspace(0.0, pi, N);

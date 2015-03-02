@@ -1,0 +1,4 @@
+-IPOPT vs SNOPT
+-40 vs 100 nodes: 1.4 vs 2.5 seconds.
+-automatic vs numerical derivatives. 2.5 seconds to 12.9 seconds.
+-black box vs symbolic.
