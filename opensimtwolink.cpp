@@ -71,7 +71,9 @@ void TwoLink::dae(double* derivatives, double* path, double* states,
     derivatives[2] = state->getYDot()[2];
     derivatives[3] = state->getYDot()[3];
 
+    /*
     std::cout << "y: " << state->getY() << std::endl;
     std::cout << "u: " << controls[0] << " " << controls[1] << std::endl;
     std::cout << "ydot: " << state->getYDot() << std::endl;
+    */
 }

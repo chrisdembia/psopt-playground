@@ -4,7 +4,7 @@ MYTWOLINK = mytwolinkarm   $(SNOPT_WRAPPER)
 
 MYTWOLINK_O = $(MYTWOLINK:%=$(EXAMPLESDIR)/%.o)
 
-opensimtwolink.o:
+opensimtwolink.o: opensimtwolink.cpp
 	g++ -c -o opensimtwolink.o opensimtwolink.cpp \
 	    -I/home/fitze/simtk/opensim320/sdk/include \
 	    -I/home/fitze/simtk/opensim320/sdk/include/SimTK/include \

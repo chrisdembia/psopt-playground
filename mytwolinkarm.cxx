@@ -211,6 +211,8 @@ int main(void)
 
     opensimTwoLink = new TwoLink();
 
+    /*
+
     adouble states[4] = {-pi, 0, 0, 0};
     adouble derivatives[4];
     adouble* path = NULL;
@@ -239,6 +241,7 @@ int main(void)
 
 
     return 0;
+    */
     /*
 void dae(adouble* derivatives, adouble* path, adouble* states, 
          adouble* controls, adouble* parameters, adouble& time, 
@@ -339,7 +342,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
 
     problem.integrand_cost 	= &integrand_cost;
     problem.endpoint_cost 	= &endpoint_cost;
-    problem.dae 		= &dae;
+    problem.dae 		= &dae_opensim;
     problem.events 		= &events;
     problem.linkages		= &linkages;
 

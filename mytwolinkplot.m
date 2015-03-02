@@ -10,6 +10,8 @@ auxdata.m2 = 1;
 time = load('t.dat')';
 state = load('x.dat')';
 control = load('u.dat')';
+%time = load('simtwolink_t.dat');
+%state = load('simtwolink_x.dat');
 
 theta1 = state(:, 1);
 theta2 = state(:, 2);
