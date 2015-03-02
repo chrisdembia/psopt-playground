@@ -211,7 +211,7 @@ int main(void)
 
     opensimTwoLink = new TwoLink();
 
-    adouble states[4] = {0, pi, 0, 0};
+    adouble states[4] = {-pi, 0, 0, 0};
     adouble derivatives[4];
     adouble* path = NULL;
     adouble* parameters = NULL;
