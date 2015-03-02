@@ -12,7 +12,6 @@ State* state;
 TwoLink::TwoLink() {
 
     model = new Model();
-    model->setUseVisualizer(true);
 
     // Two links, with mass of 1 kg, center of mass at the
     // origin of the body's frame, and moments/products of inertia of zero.
@@ -52,28 +51,7 @@ TwoLink::TwoLink() {
     model->addForce(shoulderAct);
     model->addForce(elbowAct);
 
-    State& state = model->initSystem();
-    // Fix shoulder joint, flex elbow joint.
-    //model->updCoordinateSet()[0].setLocked(state, true);
-    //model->updCoordinateSet()[1].setValue(state, 0.5 * Pi);
-    model->equilibrateMuscles(state);
-
-    // Add display geometry.
-    model->updMatterSubsystem().setShowDefaultGeometry(true);
-    /*
-    Visualizer& viz = model->updVisualizer().updSimbodyVisualizer();
-    viz.setBackgroundColor(Vec3(1, 1, 1));
-    DecorativeEllipsoid geom(Vec3(0.1, 0.5, 0.1));
-    Vec3 center(0, 0.5, 0);
-    viz.addDecoration(link1->getIndex(), Transform(center), geom);
-    viz.addDecoration(link2->getIndex(), Transform(center), geom);
-    */
-
-    // TODO state = &model->initSystem();
-    RungeKuttaMersonIntegrator integrator(model->getMultibodySystem());
-    Manager manager(*model, integrator);
-    manager.setInitialTime(0); manager.setFinalTime(10.0);
-    manager.integrate(state);
+    state = &model->initSystem();
     // model.print("mytwolink.osim");
 }
 
