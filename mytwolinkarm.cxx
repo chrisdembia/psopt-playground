@@ -75,6 +75,93 @@ void dae_opensim(adouble* derivatives, adouble* path, adouble* states,
     trace_off();
 }
 
+void dae_down(adouble* derivatives, adouble* path, adouble* states, 
+         adouble* controls, adouble* parameters, adouble& time, 
+         adouble* xad, int iphase)
+{
+
+    adouble g = 9.81;
+    adouble L1 = 1;
+    adouble L2 = 1;
+    adouble m1 = 1;
+    adouble m2 = 1;
+
+    adouble theta1 = states[ CINDEX(1) ];
+    adouble theta2 = states[ CINDEX(2) ];
+    adouble theta1dot = states[ CINDEX(3) ];
+    adouble theta2dot = states[ CINDEX(4) ];
+    adouble tau1 = controls[ CINDEX(1) ];
+    adouble tau2 = controls[ CINDEX(2) ];
+
+    derivatives[ CINDEX(1) ] = theta1dot;
+    derivatives[ CINDEX(2) ] = theta2dot;
+
+    derivatives[ CINDEX(3) ] =
+        -((g*(2*m1+m2)*sin(theta1)+m2*(g*sin(theta1-2*theta2)+2*(L2*pow(theta2dot,2)+
+                        L1*pow(theta1dot,2)*cos(theta1-theta2))*sin(theta1-theta2)))/
+            (2*L1*(m1+m2-m2*pow(cos(theta1-theta2),2))));
+
+    derivatives[ CINDEX(4)] =
+        (((m1+m2)*(L1*pow(theta1dot,2)+g*cos(theta1))+L2*m2*pow(theta2dot,2)*cos(theta1-theta2))*
+            sin(theta1-theta2))/(L2*(m1+m2-m2*pow(cos(theta1-theta2),2)));
+}
+/*
+void dae_matrix(adouble* derivatives, adouble* path, adouble* states, 
+         adouble* controls, adouble* parameters, adouble& time, 
+         adouble* xad, int iphase)
+{
+
+    adouble g = 9.81;
+    adouble L1 = 1;
+    adouble L2 = 1;
+    adouble m1 = 1;
+    adouble m2 = 1;
+
+    adouble theta1 = states[ CINDEX(1) ];
+    adouble theta2 = states[ CINDEX(2) ];
+    adouble theta1dot = states[ CINDEX(3) ];
+    adouble theta2dot = states[ CINDEX(4) ];
+    adouble tau1 = controls[ CINDEX(1) ];
+    adouble tau2 = controls[ CINDEX(2) ];
+
+    adouble c1 = cos(theta1);
+    adouble c2 = cos(theta2);
+    adouble s2 = sin(theta2);
+    adouble z1 = m2 * L1 * L2 * c2;
+    adouble z2 = m2 * L1 * L2 * s2;
+
+    adouble M11 = m1 * pow(L1, 2) + m2 * (pow(L1, 2) + pow(L2, 2)) + 2 * z1;
+    adouble M12 = m2 * pow(L2, 2) + z1;
+    adouble M22 = m2 * pow(L2, 2);
+
+    DMatrix M(2, 2, M11, M12,
+                    M12, M22);
+
+    DMatrix V(2, 1, z2 * theta2dot * (-2 * theta1dot - theta2dot),
+                    z2 * pow(theta1dot, 2));
+
+    DMatrix G(2, 1, g * ( L1 * c1 * (m1 + m2) + m2 * L2),
+                    g * m2 * L2 * cos(theta1 + theta2));
+
+    DMatrix tau(2, 1, tau1, tau2);
+
+    DMatrix qdd = M / (tau - (V + G));
+    
+    derivatives[ CINDEX(1) ] = theta1dot;
+    derivatives[ CINDEX(2) ] = theta2dot;
+    derivatives[ CINDEX(3) ] = qdd(1, 1);
+    derivatives[ CINDEX(4) ] = qdd(2, 1);
+
+
+V = m2 * L1 * L2 * s2 * [theta2dot * (-2 * theta1dot - theta2dot);
+                         theta1dot^2];
+G = g * [L1 * c1 * (m1 + m2) + m2 * L2;
+         m2 * L2 * cos(theta1 + theta2)];
+thetadot = simplify(M\(tau - (V + G)), 100);
+
+}
+*/
+
 void dae(adouble* derivatives, adouble* path, adouble* states, 
          adouble* controls, adouble* parameters, adouble& time, 
          adouble* xad, int iphase)
@@ -342,7 +429,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
 
     problem.integrand_cost 	= &integrand_cost;
     problem.endpoint_cost 	= &endpoint_cost;
-    problem.dae 		= &dae_opensim;
+    problem.dae 		= &dae_down;
     problem.events 		= &events;
     problem.linkages		= &linkages;
 
@@ -356,8 +443,8 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
     int N = 40;
     DMatrix x0(4,N);
 
-    x0(1,colon()) = linspace(0.0, pi, N);
-    x0(2,colon()) = linspace(0.0, -0.5 * pi, N);
+    x0(1,colon()) = linspace(0.0, 0.5 * pi, N);
+    x0(2,colon()) = linspace(0.0, 0.0, N);
     x0(3,colon()) = linspace(0.0, 0.0, N);
     x0(4,colon()) = linspace(0.0, 0.0, N);
 
