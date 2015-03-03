@@ -32,4 +32,4 @@ mytwolink: $(MYTWOLINK_O) opensimtwolink.o $(PSOPT_LIBS) $(DMATRIX_LIBS) $(SPARS
 	-losimLepton \
 	-lSimTKmath \
 	-lSimTKcommon \
-	-lSimTKsimbody \
+	-lSimTKsimbody 

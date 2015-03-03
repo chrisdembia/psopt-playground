@@ -51,15 +51,15 @@ void dae_opensim(adouble* derivatives, adouble* path, adouble* states,
          adouble* controls, adouble* parameters, adouble& time, 
          adouble* xad, int iphase)
 {
-    double dderivatives[4];
-    double dstates[4];
-    double dcontrols[2];
+    double dderivatives[2];
+    double dstates[2];
+    double dcontrols[1];
     double dtime;
     trace_on(100);
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 2; ++i) {
         states[i] >>= dstates[i];
     }
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 1; ++i) {
         controls[i] >>= dcontrols[i];
     }
     time >>= dtime;
@@ -68,7 +68,7 @@ void dae_opensim(adouble* derivatives, adouble* path, adouble* states,
          dcontrols, NULL, dtime, 
          NULL, iphase);
 
-    for (int i = 0; i < 4; ++i) {
+    for (int i = 0; i < 2; ++i) {
         derivatives[i] <<= dderivatives[i];
     }
 
@@ -259,6 +259,17 @@ void events(adouble* e, adouble* initial_states, adouble* final_states,
 {
    adouble x10 = initial_states[ CINDEX(1) ];
    adouble x20 = initial_states[ CINDEX(2) ];
+   adouble x1f = final_states[ CINDEX(1) ];
+   adouble x2f = final_states[ CINDEX(2) ];
+
+   e[ CINDEX(1) ] = x10;
+   e[ CINDEX(2) ] = x20;
+   e[ CINDEX(3) ] = x1f;
+   e[ CINDEX(4) ] = x2f;
+
+   /*
+   adouble x10 = initial_states[ CINDEX(1) ];
+   adouble x20 = initial_states[ CINDEX(2) ];
    adouble x30 = initial_states[ CINDEX(3) ];
    adouble x40 = initial_states[ CINDEX(4) ];
    adouble x1f = final_states[ CINDEX(1) ];
@@ -274,6 +285,7 @@ void events(adouble* e, adouble* initial_states, adouble* final_states,
    e[ CINDEX(6) ] = x2f;
    e[ CINDEX(7) ] = x3f;
    e[ CINDEX(8) ] = x4f;
+   */
 
 }
 
@@ -365,9 +377,9 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
 /////////   Define phase related information & do level 2 setup /////////////
 /////////////////////////////////////////////////////////////////////////////
 
-    problem.phases(1).nstates   		= 4;
-    problem.phases(1).ncontrols 		= 2;
-    problem.phases(1).nevents   		= 8;
+    problem.phases(1).nstates   		= 2;
+    problem.phases(1).ncontrols 		= 1;
+    problem.phases(1).nevents   		= 4;
     problem.phases(1).npath     		= 0;
     problem.phases(1).nodes             = 40;  
 
@@ -385,6 +397,23 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
 ///////////////////  Enter problem bounds information //////////////////////
 ////////////////////////////////////////////////////////////////////////////
 
+    problem.phases(1).bounds.lower.states(1) = -pi;
+    problem.phases(1).bounds.lower.states(2) = -100 * pi;
+
+    problem.phases(1).bounds.upper.states(1) = pi;
+    problem.phases(1).bounds.upper.states(2) = 100 * pi;
+
+    problem.phases(1).bounds.lower.controls(1) = -1000.0;
+
+    problem.phases(1).bounds.upper.controls(1) = 1000.0;
+
+    problem.phases(1).bounds.lower.events(1) = 0.0;
+    problem.phases(1).bounds.lower.events(2) = 0.0;
+
+    problem.phases(1).bounds.lower.events(3) = 0.5 * pi;
+    problem.phases(1).bounds.lower.events(4) = 0.0;
+
+    /*
     problem.phases(1).bounds.lower.states(1) = -pi;
     problem.phases(1).bounds.lower.states(2) = -pi;
     problem.phases(1).bounds.lower.states(3) = -100 * pi;
@@ -410,6 +439,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
     problem.phases(1).bounds.lower.events(6) = 0.0 * pi;
     problem.phases(1).bounds.lower.events(7) = 0.0;
     problem.phases(1).bounds.lower.events(8) = 0.0;
+    */
 
     problem.phases(1).bounds.upper.events = problem.phases(1).bounds.lower.events;
 
@@ -441,12 +471,17 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
 
 
     int N = 40;
-    DMatrix x0(4,N);
+    DMatrix x0(2,N);
 
+    x0(1,colon()) = linspace(0.0, 0.5 * pi, N);
+    x0(2,colon()) = linspace(0.0, 0.0, N);
+
+    /*
     x0(1,colon()) = linspace(0.0, 0.5 * pi, N);
     x0(2,colon()) = linspace(0.0, 0.0 * pi, N);
     x0(3,colon()) = linspace(0.0, 0.0, N);
     x0(4,colon()) = linspace(0.0, 0.0, N);
+    */
 
     problem.phases(1).guess.controls       = zeros(1,N);
     problem.phases(1).guess.states         = x0;
