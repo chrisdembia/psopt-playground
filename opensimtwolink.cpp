@@ -16,23 +16,23 @@ TwoLink::TwoLink() {
     // Two links, with mass of 1 kg, center of mass at the
     // origin of the body's frame, and moments/products of inertia of zero.
     OpenSim::Body* link1 = new OpenSim::Body("humerus", 1, Vec3(0), Inertia(0));
-    //OpenSim::Body* link2 = new OpenSim::Body("radius", 1, Vec3(0), Inertia(0));
+    OpenSim::Body* link2 = new OpenSim::Body("radius", 1, Vec3(0), Inertia(0));
 
-    /*
     // Joints that connect the bodies together.
     PinJoint* joint1 = new PinJoint("shoulder",
             // Parent body, location in parent, orientation in parent.
             model->getGroundBody(), Vec3(0), Vec3(0),
             // Child body, location in child, orientation in child.
             *link1, Vec3(-1, 0, 0), Vec3(0));
-    //PinJoint* joint2 = new PinJoint("elbow",
-    //        *link1, Vec3(0), Vec3(0), *link2, Vec3(-1, 0, 0), Vec3(0));
-    */
+    PinJoint* joint2 = new PinJoint("elbow",
+            *link1, Vec3(0), Vec3(0), *link2, Vec3(-1, 0, 0), Vec3(0));
+    /*
     SliderJoint* joint1 = new SliderJoint("shoulder",
             // Parent body, location in parent, orientation in parent.
             model->getGroundBody(), Vec3(0), Vec3(0),
             // Child body, location in child, orientation in child.
             *link1, Vec3(0, 0, 0), Vec3(0));
+            */
 
     /*
     // Add an actuator that crosses the elbow, and a joint stop.
@@ -50,14 +50,14 @@ TwoLink::TwoLink() {
     */
 
     CoordinateActuator* shoulderAct = new CoordinateActuator("shoulder_coord_0");
-    //CoordinateActuator* elbowAct = new CoordinateActuator("elbow_coord_0");
+    CoordinateActuator* elbowAct = new CoordinateActuator("elbow_coord_0");
 
     // Add bodies and joints to the model.
     model->addBody(link1);
-    //model->addBody(link2);
+    model->addBody(link2);
     // model.addForce(muscle);
     model->addForce(shoulderAct);
-    //model->addForce(elbowAct);
+    model->addForce(elbowAct);
 
     state = &model->initSystem();
     model->print("mytwolink.osim");
@@ -66,11 +66,25 @@ TwoLink::TwoLink() {
 void TwoLink::dae(double* derivatives, double* path, double* states, 
         double* controls, double* parameters, double& time, 
         double* xad, int iphase) {
+
+    State s = *state;
+    model->getMultibodySystem().realize(s, SimTK::Stage::Position);
+    model->setControls(s, SimTK::Vector(2, controls));
+    model->getCoordinateSet()[0].setValue(s, states[0]);
+    model->getCoordinateSet()[1].setValue(s, states[1]);
+    model->getCoordinateSet()[0].setSpeedValue(s, states[2]);
+    model->getCoordinateSet()[1].setSpeedValue(s, states[3]);
+    model->getMultibodySystem().realize(s, SimTK::Stage::Acceleration);
+    derivatives[0] = s.getYDot()[0];
+    derivatives[1] = s.getYDot()[1];
+    derivatives[2] = s.getYDot()[2];
+    derivatives[3] = s.getYDot()[3];
     /*
     derivatives[0] = states[1];
     derivatives[1] = controls[0];
     */
-    State s = *state;
+    /*
+     s = *state;
     model->getMultibodySystem().realize(s, SimTK::Stage::Position);
     model->setControls(s, SimTK::Vector(1, controls[0]));
     model->getCoordinateSet()[0].setValue(s, states[0]);
@@ -78,6 +92,7 @@ void TwoLink::dae(double* derivatives, double* path, double* states,
     model->getMultibodySystem().realize(s, SimTK::Stage::Acceleration);
     derivatives[0] = s.getYDot()[0];
     derivatives[1] = s.getYDot()[1];
+    */
     /*
     Model m(*model);
     State s = m.initSystem();

@@ -18,18 +18,18 @@ theta2 = state(:, 2);
 
 X1 = auxdata.L1 * cos(theta1);
 Y1 = auxdata.L1 * sin(theta1);
-%X2 = X1 + auxdata.L2 * cos(theta1 + theta2);
-%Y2 = Y1 + auxdata.L2 * sin(theta1 + theta2);
+X2 = X1 + auxdata.L2 * cos(theta1 + theta2);
+Y2 = Y1 + auxdata.L2 * sin(theta1 + theta2);
 
 h = figure;
 hold on;
 axis(2 * [-1 1 -1 1]);
 for i = 1:length(time)
     plot([0 X1(i)], [0 Y1(i)]);
-%    plot([X1(i) X2(i)], [Y1(i) Y2(i)]);
+    plot([X1(i) X2(i)], [Y1(i) Y2(i)]);
     pause(0.10);
     cla;
 end
 plot([0 X1(i)], [0 Y1(i)]);
-%plot([X1(i) X2(i)], [Y1(i) Y2(i)]);
+plot([X1(i) X2(i)], [Y1(i) Y2(i)]);
 
