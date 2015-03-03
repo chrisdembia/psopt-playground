@@ -52,7 +52,7 @@
 					<inertia_yz>0</inertia_yz>
 					<!--Joint that connects this body with the parent body.-->
 					<Joint>
-						<PinJoint name="shoulder">
+						<SliderJoint name="shoulder">
 							<!--Name of the parent body to which this joint connects its owner body.-->
 							<parent_body>ground</parent_body>
 							<!--Location of the joint in the parent body specified in the parent reference frame. Default is (0,0,0).-->
@@ -60,7 +60,7 @@
 							<!--Orientation of the joint in the parent body specified in the parent reference frame. Euler XYZ body-fixed rotation angles are used to express the orientation. Default is (0,0,0).-->
 							<orientation_in_parent>0 0 0</orientation_in_parent>
 							<!--Location of the joint in the child body specified in the child reference frame. For SIMM models, this vector is always the zero vector (i.e., the body reference frame coincides with the joint). -->
-							<location>-1 0 0</location>
+							<location>0 0 0</location>
 							<!--Orientation of the joint in the owing body specified in the owning body reference frame.  Euler XYZ body-fixed rotation angles are used to express the orientation. -->
 							<orientation>0 0 0</orientation>
 							<!--Set holding the generalized coordinates (q's) that parmeterize this joint.-->
@@ -68,70 +68,16 @@
 								<objects>
 									<Coordinate name="shoulder_coord_0">
 										<!--Coordinate can describe rotational, translational, or coupled motion. Defaults to rotational.-->
-										<motion_type>rotational</motion_type>
+										<motion_type>translational</motion_type>
+										<!--Flag indicating whether or not the values of the coordinates should be prescribed according to the function above. It is ignored if the no prescribed function is specified.-->
+										<prescribed>false</prescribed>
 									</Coordinate>
 								</objects>
 								<groups />
 							</CoordinateSet>
 							<!--Whether the joint transform defines parent->child or child->parent.-->
 							<reverse>false</reverse>
-						</PinJoint>
-					</Joint>
-					<VisibleObject>
-						<!--Set of geometry files and associated attributes, allow .vtp, .stl, .obj-->
-						<GeometrySet>
-							<objects />
-							<groups />
-						</GeometrySet>
-						<!--Three scale factors for display purposes: scaleX scaleY scaleZ-->
-						<scale_factors> 1 1 1</scale_factors>
-						<!--transform relative to owner specified as 3 rotations (rad) followed by 3 translations rX rY rZ tx ty tz-->
-						<transform> -0 0 -0 0 0 0</transform>
-						<!--Whether to show a coordinate frame-->
-						<show_axes>false</show_axes>
-						<!--Display Pref. 0:Hide 1:Wire 3:Flat 4:Shaded Can be overriden for individual geometries-->
-						<display_preference>4</display_preference>
-					</VisibleObject>
-					<WrapObjectSet>
-						<objects />
-						<groups />
-					</WrapObjectSet>
-				</Body>
-				<Body name="radius">
-					<mass>1</mass>
-					<mass_center> 0 0 0</mass_center>
-					<inertia_xx>0</inertia_xx>
-					<inertia_yy>0</inertia_yy>
-					<inertia_zz>0</inertia_zz>
-					<inertia_xy>0</inertia_xy>
-					<inertia_xz>0</inertia_xz>
-					<inertia_yz>0</inertia_yz>
-					<!--Joint that connects this body with the parent body.-->
-					<Joint>
-						<PinJoint name="elbow">
-							<!--Name of the parent body to which this joint connects its owner body.-->
-							<parent_body>humerus</parent_body>
-							<!--Location of the joint in the parent body specified in the parent reference frame. Default is (0,0,0).-->
-							<location_in_parent>0 0 0</location_in_parent>
-							<!--Orientation of the joint in the parent body specified in the parent reference frame. Euler XYZ body-fixed rotation angles are used to express the orientation. Default is (0,0,0).-->
-							<orientation_in_parent>0 0 0</orientation_in_parent>
-							<!--Location of the joint in the child body specified in the child reference frame. For SIMM models, this vector is always the zero vector (i.e., the body reference frame coincides with the joint). -->
-							<location>-1 0 0</location>
-							<!--Orientation of the joint in the owing body specified in the owning body reference frame.  Euler XYZ body-fixed rotation angles are used to express the orientation. -->
-							<orientation>0 0 0</orientation>
-							<!--Set holding the generalized coordinates (q's) that parmeterize this joint.-->
-							<CoordinateSet>
-								<objects>
-									<Coordinate name="elbow_coord_0">
-										<!--Coordinate can describe rotational, translational, or coupled motion. Defaults to rotational.-->
-										<motion_type>rotational</motion_type>
-									</Coordinate>
-								</objects>
-								<groups />
-							</CoordinateSet>
-							<!--Whether the joint transform defines parent->child or child->parent.-->
-							<reverse>false</reverse>
-						</PinJoint>
+						</SliderJoint>
 					</Joint>
 					<VisibleObject>
 						<!--Set of geometry files and associated attributes, allow .vtp, .stl, .obj-->
@@ -167,10 +113,6 @@
 				<CoordinateActuator>
 					<!--Name of the generalized coordinate to which the actuator applies.-->
 					<coordinate>shoulder_coord_0</coordinate>
-				</CoordinateActuator>
-				<CoordinateActuator>
-					<!--Name of the generalized coordinate to which the actuator applies.-->
-					<coordinate>elbow_coord_0</coordinate>
 				</CoordinateActuator>
 			</objects>
 			<groups />

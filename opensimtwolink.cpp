@@ -18,6 +18,7 @@ TwoLink::TwoLink() {
     OpenSim::Body* link1 = new OpenSim::Body("humerus", 1, Vec3(0), Inertia(0));
     //OpenSim::Body* link2 = new OpenSim::Body("radius", 1, Vec3(0), Inertia(0));
 
+    /*
     // Joints that connect the bodies together.
     PinJoint* joint1 = new PinJoint("shoulder",
             // Parent body, location in parent, orientation in parent.
@@ -26,6 +27,12 @@ TwoLink::TwoLink() {
             *link1, Vec3(-1, 0, 0), Vec3(0));
     //PinJoint* joint2 = new PinJoint("elbow",
     //        *link1, Vec3(0), Vec3(0), *link2, Vec3(-1, 0, 0), Vec3(0));
+    */
+    SliderJoint* joint1 = new SliderJoint("shoulder",
+            // Parent body, location in parent, orientation in parent.
+            model->getGroundBody(), Vec3(0), Vec3(0),
+            // Child body, location in child, orientation in child.
+            *link1, Vec3(0, 0, 0), Vec3(0));
 
     /*
     // Add an actuator that crosses the elbow, and a joint stop.
@@ -53,18 +60,39 @@ TwoLink::TwoLink() {
     //model->addForce(elbowAct);
 
     state = &model->initSystem();
-    // model.print("mytwolink.osim");
+    model->print("mytwolink.osim");
 }
 
 void TwoLink::dae(double* derivatives, double* path, double* states, 
         double* controls, double* parameters, double& time, 
         double* xad, int iphase) {
-    model->setControls(*state, SimTK::Vector(1, controls));
-    model->getCoordinateSet()[0].setValue(*state, states[0]);
-    model->getCoordinateSet()[0].setSpeedValue(*state, states[1]);
-    model->getMultibodySystem().realize(*state, SimTK::Stage::Acceleration);
-    derivatives[0] = state->getYDot()[0];
-    derivatives[1] = state->getYDot()[1];
+    /*
+    derivatives[0] = states[1];
+    derivatives[1] = controls[0];
+    */
+    State s = *state;
+    model->getMultibodySystem().realize(s, SimTK::Stage::Position);
+    model->setControls(s, SimTK::Vector(1, controls[0]));
+    model->getCoordinateSet()[0].setValue(s, states[0]);
+    model->getCoordinateSet()[0].setSpeedValue(s, states[1]);
+    model->getMultibodySystem().realize(s, SimTK::Stage::Acceleration);
+    derivatives[0] = s.getYDot()[0];
+    derivatives[1] = s.getYDot()[1];
+    /*
+    Model m(*model);
+    State s = m.initSystem();
+    m.getMultibodySystem().realize(s, SimTK::Stage::Acceleration);
+    std::cout << "DEBUG HELLO" << std::endl;
+    m.setControls(s, SimTK::Vector(1, controls[0]));
+    std::cout << "DEBUG HELLO 1" << std::endl;
+    m.getCoordinateSet()[0].setValue(s, states[0]);
+    std::cout << "DEBUG HELLO 2" << std::endl;
+    m.getCoordinateSet()[0].setSpeedValue(s, states[1]);
+    std::cout << "DEBUG HELLO 3" << std::endl;
+    m.getMultibodySystem().realize(s, SimTK::Stage::Acceleration);
+    derivatives[0] = s.getYDot()[0];
+    derivatives[1] = s.getYDot()[1];
+    */
     /*
     model->setControls(*state, SimTK::Vector(2, controls));
     model->getCoordinateSet()[0].setValue(*state, states[0]);

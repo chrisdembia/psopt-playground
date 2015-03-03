@@ -47,6 +47,14 @@ adouble integrand_cost(adouble* states, adouble* controls,
 ///////////////////  Define the DAE's ////////////////////////////////////
 //////////////////////////////////////////////////////////////////////////
 
+void dae_point(adouble* derivatives, adouble* path, adouble* states, 
+         adouble* controls, adouble* parameters, adouble& time, 
+         adouble* xad, int iphase)
+{
+    derivatives[0] = states[1];
+    derivatives[1] = controls[0];
+}
+
 void dae_opensim(adouble* derivatives, adouble* path, adouble* states, 
          adouble* controls, adouble* parameters, adouble& time, 
          adouble* xad, int iphase)
@@ -309,6 +317,37 @@ int main(void)
     double pi = 3.14159;
 
     opensimTwoLink = new TwoLink();
+
+    /*
+    adouble states[2] = {0, 0};
+    adouble derivatives[2];
+    adouble* path = NULL;
+    adouble* parameters = NULL;
+    adouble time = 0;
+    adouble* xad = NULL;
+    adouble controls[1] = {2};
+
+    dae_opensim(derivatives, path, states, controls, parameters, time, xad, 1);
+
+    std::cout << "OPENSIM: ";
+    for (int i = 0; i < 2; ++i) {
+        std::cout << derivatives[i] << " ";
+    }
+    std::cout << std::endl;
+
+    //
+    adouble aderivatives[2];
+    dae_point(aderivatives, path, states, controls, parameters, time, xad, 1);
+
+    std::cout << "ADOL: ";
+    for (int i = 0; i < 2; ++i) {
+        std::cout << aderivatives[i] << " ";
+    }
+    std::cout << std::endl;
+
+
+    return 0;
+    */
 
     /*
 
