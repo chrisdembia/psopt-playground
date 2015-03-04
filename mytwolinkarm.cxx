@@ -40,7 +40,7 @@ adouble integrand_cost(adouble* states, adouble* controls,
                        adouble* parameters, adouble& time, adouble* xad, 
                        int iphase)
 {
-    return  0.0;
+    return  0.001 * (pow(controls[0], 2) + pow(controls[1], 2));
 } 
 
 //////////////////////////////////////////////////////////////////////////
