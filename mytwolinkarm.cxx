@@ -466,12 +466,12 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
     problem.phases(1).bounds.upper.states(3) = 100 * pi;
     problem.phases(1).bounds.upper.states(4) = 100 * pi;
 
-    problem.phases(1).bounds.lower.controls(1) = -1000.0;
-    problem.phases(1).bounds.lower.controls(2) = -1000.0;
-    problem.phases(1).bounds.lower.controls(3) = 0.0;
+    problem.phases(1).bounds.lower.controls(1) = 0.0;
+    problem.phases(1).bounds.lower.controls(2) = 0.0;
+    problem.phases(1).bounds.lower.controls(3) = -1000.0;
 
-    problem.phases(1).bounds.upper.controls(1) = 1000.0;
-    problem.phases(1).bounds.upper.controls(2) = 1000.0;
+    problem.phases(1).bounds.upper.controls(1) = 100.0;
+    problem.phases(1).bounds.upper.controls(2) = 100.0;
     problem.phases(1).bounds.upper.controls(3) = 1000.0;
 
     problem.phases(1).bounds.lower.events(1) = 0.0;

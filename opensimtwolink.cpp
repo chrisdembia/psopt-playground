@@ -64,7 +64,7 @@ TwoLink::TwoLink() {
     model->addBody(link2);
     model->addForce(muscle1L);
     model->addForce(muscle1R);
-    model->addForce(shoulderAct);
+    //model->addForce(shoulderAct);
     model->addForce(elbowAct);
     //model->addController(brain);
 

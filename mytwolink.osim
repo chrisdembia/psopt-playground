@@ -296,10 +296,6 @@
 				</PathActuator>
 				<CoordinateActuator>
 					<!--Name of the generalized coordinate to which the actuator applies.-->
-					<coordinate>shoulder_coord_0</coordinate>
-				</CoordinateActuator>
-				<CoordinateActuator>
-					<!--Name of the generalized coordinate to which the actuator applies.-->
 					<coordinate>elbow_coord_0</coordinate>
 				</CoordinateActuator>
 			</objects>
