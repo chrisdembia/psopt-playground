@@ -61,13 +61,13 @@ void dae_opensim(adouble* derivatives, adouble* path, adouble* states,
 {
     double dderivatives[4];
     double dstates[4];
-    double dcontrols[2];
+    double dcontrols[3];
     double dtime;
     trace_on(100);
     for (int i = 0; i < 4; ++i) {
         states[i] >>= dstates[i];
     }
-    for (int i = 0; i < 2; ++i) {
+    for (int i = 0; i < 3; ++i) {
         controls[i] >>= dcontrols[i];
     }
     time >>= dtime;
@@ -318,7 +318,7 @@ int main(void)
 
     opensimTwoLink = new TwoLink();
 
-    return 0; // TODO DEBUG
+    // return 0; // TODO DEBUG
 
     /*
     adouble states[2] = {0, 0};
@@ -419,7 +419,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
 /////////////////////////////////////////////////////////////////////////////
 
     problem.phases(1).nstates   		= 4;
-    problem.phases(1).ncontrols 		= 2;
+    problem.phases(1).ncontrols 		= 3;
     problem.phases(1).nevents   		= 8;
     problem.phases(1).npath     		= 0;
     problem.phases(1).nodes             = 40;  
@@ -468,9 +468,11 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
 
     problem.phases(1).bounds.lower.controls(1) = -1000.0;
     problem.phases(1).bounds.lower.controls(2) = -1000.0;
+    problem.phases(1).bounds.lower.controls(3) = 0.0;
 
     problem.phases(1).bounds.upper.controls(1) = 1000.0;
     problem.phases(1).bounds.upper.controls(2) = 1000.0;
+    problem.phases(1).bounds.upper.controls(3) = 1000.0;
 
     problem.phases(1).bounds.lower.events(1) = 0.0;
     problem.phases(1).bounds.lower.events(2) = 0.0;
@@ -524,7 +526,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
     x0(3,colon()) = linspace(0.0, 0.0, N);
     x0(4,colon()) = linspace(0.0, 0.0, N);
 
-    problem.phases(1).guess.controls       = zeros(1,N);
+    problem.phases(1).guess.controls       = zeros(3,N);
     problem.phases(1).guess.states         = x0;
     problem.phases(1).guess.time           = linspace(0.0, 3.0, N); 
 

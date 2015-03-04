@@ -180,11 +180,11 @@
 									<x_location>
 										<Sine>
 											<!--amplitude of the sinusoidal function-->
-											<amplitude>-0.1</amplitude>
+											<amplitude>0.1</amplitude>
 											<!--the angular frequency (omega) in radians/sec-->
 											<omega>1</omega>
 											<!--the phase shift of the sinusoidal function-->
-											<phase>0</phase>
+											<phase>2.35619449019234</phase>
 										</Sine>
 									</x_location>
 									<x_coordinate>shoulder_coord_0</x_coordinate>
@@ -195,7 +195,7 @@
 											<!--the angular frequency (omega) in radians/sec-->
 											<omega>1</omega>
 											<!--the phase shift of the sinusoidal function-->
-											<phase>0.785398163397448</phase>
+											<phase>1.5707963267949</phase>
 										</Sine>
 									</y_location>
 									<y_coordinate>shoulder_coord_0</y_coordinate>
@@ -254,21 +254,7 @@
 		</ContactGeometrySet>
 		<!--Controllers in the model.-->
 		<ControllerSet name="Controllers">
-			<objects>
-				<PrescribedController>
-					<!--The list of model actuators that this controller will control.The keyword ALL indicates the controller will controll all the acuators in the model-->
-					<actuator_list>muscle1</actuator_list>
-					<!--Functions (one per control) describing the controls for actuatorsspecified for this controller.-->
-					<FunctionSet name="ControlFunctions">
-						<objects>
-							<Constant>
-								<value>100</value>
-							</Constant>
-						</objects>
-						<groups />
-					</FunctionSet>
-				</PrescribedController>
-			</objects>
+			<objects />
 			<groups />
 		</ControllerSet>
 		<!--Additional components in the model.-->

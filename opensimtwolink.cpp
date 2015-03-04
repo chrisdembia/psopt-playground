@@ -12,7 +12,7 @@ State* state;
 TwoLink::TwoLink() {
 
     model = new Model();
-    model->setUseVisualizer(true);
+    // TODO model->setUseVisualizer(true);
 
     // Two links, with mass of 1 kg, center of mass at the
     // origin of the body's frame, and moments/products of inertia of zero.
@@ -45,12 +45,14 @@ TwoLink::TwoLink() {
     ////muscle1->addNewPathPoint("point2", *link1, Vec3(-1.0, 0.1, 0));
     //muscle1->addNewPathPoint("point3", *link1, Vec3(-0.3, 0.0, 0));
 
+    /*
     // A controller that specifies the excitation of the biceps muscle.
     PrescribedController* brain = new PrescribedController();
     brain->addActuator(*muscle1);
     // Muscle excitation is 0.3 for the first 0.5 seconds, and 1.0 thereafter.
     brain->prescribeControlForActuator("muscle1",
-            new Constant(100)); // new StepFunction(0.5, 3, 0.3, 1));
+            new Constant(10000)); // new StepFunction(0.5, 3, 0.3, 1));
+    */
 
     CoordinateActuator* shoulderAct = new CoordinateActuator("shoulder_coord_0");
     CoordinateActuator* elbowAct = new CoordinateActuator("elbow_coord_0");
@@ -61,7 +63,7 @@ TwoLink::TwoLink() {
     model->addForce(muscle1);
     model->addForce(shoulderAct);
     model->addForce(elbowAct);
-    model->addController(brain);
+    //model->addController(brain);
 
     state = &model->initSystem();
 
@@ -81,10 +83,10 @@ TwoLink::TwoLink() {
     pp1->setBody(ground);
     //pp1->setLocation(*state, Vec3(-0.1, 0.1, 0));
     pp1->setXCoordinate(*state, model->updCoordinateSet()[0]);
-    Sine* xfunc = new Sine(-0.1, 1, 0); // Constant(-0.1);
+    Sine* xfunc = new Sine(0.1, 1, 0.25 * Pi + 0.5 * Pi); // Constant(-0.1);
     pp1->setXFunction(*state, *xfunc);
     pp1->setYCoordinate(*state, model->updCoordinateSet()[0]);
-    Sine* yfunc = new Sine(0.1, 1, 0.25 * SimTK::Pi);
+    Sine* yfunc = new Sine(0.1, 1, 0.5 * SimTK::Pi);
     pp1->setYFunction(*state, *yfunc);
     pp1->setZCoordinate(*state, model->updCoordinateSet()[0]);
     Constant* zfunc = new Constant(0.0);
@@ -96,12 +98,14 @@ TwoLink::TwoLink() {
 
     state = &model->initSystem();
 
+    /*
     model->updMatterSubsystem().setShowDefaultGeometry(true);
 
     RungeKuttaMersonIntegrator integrator(model->getMultibodySystem());
     Manager manager(*model, integrator);
     manager.setInitialTime(0); manager.setFinalTime(10.0);
     manager.integrate(*state);
+    */
 
 }
 
@@ -111,7 +115,7 @@ void TwoLink::dae(double* derivatives, double* path, double* states,
 
     State s = *state;
     model->getMultibodySystem().realize(s, SimTK::Stage::Position);
-    model->setControls(s, SimTK::Vector(2, controls));
+    model->setControls(s, SimTK::Vector(3, controls));
     model->getCoordinateSet()[0].setValue(s, states[0]);
     model->getCoordinateSet()[1].setValue(s, states[1]);
     model->getCoordinateSet()[0].setSpeedValue(s, states[2]);
