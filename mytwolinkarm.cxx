@@ -318,6 +318,8 @@ int main(void)
 
     opensimTwoLink = new TwoLink();
 
+    return 0; // TODO DEBUG
+
     /*
     adouble states[2] = {0, 0};
     adouble derivatives[2];

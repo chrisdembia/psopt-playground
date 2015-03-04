@@ -12,9 +12,11 @@ State* state;
 TwoLink::TwoLink() {
 
     model = new Model();
+    model->setUseVisualizer(true);
 
     // Two links, with mass of 1 kg, center of mass at the
     // origin of the body's frame, and moments/products of inertia of zero.
+    OpenSim::Body& ground = model->getGroundBody();
     OpenSim::Body* link1 = new OpenSim::Body("humerus", 1, Vec3(0), Inertia(0));
     OpenSim::Body* link2 = new OpenSim::Body("radius", 1, Vec3(0), Inertia(0));
 
@@ -34,20 +36,21 @@ TwoLink::TwoLink() {
             *link1, Vec3(0, 0, 0), Vec3(0));
             */
 
-    /*
-    // Add an actuator that crosses the elbow, and a joint stop.
-    Millard2012EquilibriumMuscle* muscle = new
-    Millard2012EquilibriumMuscle("biceps", 200, 0.6, 0.55, 0);
-    muscle->addNewPathPoint("point1", *link1, Vec3(0, 0.8, 0));
-    muscle->addNewPathPoint("point2", *link2, Vec3(0, 0.7, 0));
+    //Millard2012EquilibriumMuscle* muscle1 = new
+    //    Millard2012EquilibriumMuscle("muscle1", 200, 0.6, 0.55, 0);
+    //muscle1->setMuscleConfiguration(true, true, 0.000);
+    PathActuator* muscle1 = new PathActuator();
+    muscle1->setName("muscle1");
+    //muscle1->addNewPathPoint("point1", ground, Vec3(-0.1, 0.0, 0));
+    ////muscle1->addNewPathPoint("point2", *link1, Vec3(-1.0, 0.1, 0));
+    //muscle1->addNewPathPoint("point3", *link1, Vec3(-0.3, 0.0, 0));
 
     // A controller that specifies the excitation of the biceps muscle.
     PrescribedController* brain = new PrescribedController();
-    brain->addActuator(*muscle);
+    brain->addActuator(*muscle1);
     // Muscle excitation is 0.3 for the first 0.5 seconds, and 1.0 thereafter.
-    brain->prescribeControlForActuator("biceps",
-    new StepFunction(0.5, 3, 0.3, 1));
-    */
+    brain->prescribeControlForActuator("muscle1",
+            new Constant(100)); // new StepFunction(0.5, 3, 0.3, 1));
 
     CoordinateActuator* shoulderAct = new CoordinateActuator("shoulder_coord_0");
     CoordinateActuator* elbowAct = new CoordinateActuator("elbow_coord_0");
@@ -55,12 +58,51 @@ TwoLink::TwoLink() {
     // Add bodies and joints to the model.
     model->addBody(link1);
     model->addBody(link2);
-    // model.addForce(muscle);
+    model->addForce(muscle1);
     model->addForce(shoulderAct);
     model->addForce(elbowAct);
+    model->addController(brain);
 
     state = &model->initSystem();
+
+    /*
+    muscle1->addNewPathPoint("point1", ground, Vec3(-0.1, 0.1, 0));
+    muscle1->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
+    ConditionalPathPoint* pp1 = new ConditionalPathPoint();
+    pp1->setBody(ground);
+    pp1->setLocation(*state, Vec3(-0.1, 0.1, 0));
+    pp1->setCoordinate(*state, model->updCoordinateSet()[0]);
+    pp1->setRangeMin(*state, 
+    muscle1->updGeometryPath().adoptAndAppend(pp1);
+    muscle1->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
+    */
+    MovingPathPoint* pp1 = new MovingPathPoint();
+    pp1->setName("point1");
+    pp1->setBody(ground);
+    //pp1->setLocation(*state, Vec3(-0.1, 0.1, 0));
+    pp1->setXCoordinate(*state, model->updCoordinateSet()[0]);
+    Sine* xfunc = new Sine(-0.1, 1, 0); // Constant(-0.1);
+    pp1->setXFunction(*state, *xfunc);
+    pp1->setYCoordinate(*state, model->updCoordinateSet()[0]);
+    Sine* yfunc = new Sine(0.1, 1, 0.25 * SimTK::Pi);
+    pp1->setYFunction(*state, *yfunc);
+    pp1->setZCoordinate(*state, model->updCoordinateSet()[0]);
+    Constant* zfunc = new Constant(0.0);
+    pp1->setZFunction(*state, *zfunc);
+    muscle1->updGeometryPath().updPathPointSet().adoptAndAppend(pp1);
+    muscle1->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
+
     model->print("mytwolink.osim");
+
+    state = &model->initSystem();
+
+    model->updMatterSubsystem().setShowDefaultGeometry(true);
+
+    RungeKuttaMersonIntegrator integrator(model->getMultibodySystem());
+    Manager manager(*model, integrator);
+    manager.setInitialTime(0); manager.setFinalTime(10.0);
+    manager.integrate(*state);
+
 }
 
 void TwoLink::dae(double* derivatives, double* path, double* states, 
