@@ -168,7 +168,7 @@
 		<!--Forces in the model.-->
 		<ForceSet>
 			<objects>
-				<PathActuator name="muscle1">
+				<PathActuator name="muscle1L">
 					<!--The set of points defining the path of the muscle.-->
 					<GeometryPath>
 						<!--The set of points defining the path-->
@@ -184,7 +184,7 @@
 											<!--the angular frequency (omega) in radians/sec-->
 											<omega>1</omega>
 											<!--the phase shift of the sinusoidal function-->
-											<phase>2.35619449019234</phase>
+											<phase>3.14159265358979</phase>
 										</Sine>
 									</x_location>
 									<x_coordinate>shoulder_coord_0</x_coordinate>
@@ -192,6 +192,69 @@
 										<Sine>
 											<!--amplitude of the sinusoidal function-->
 											<amplitude>0.1</amplitude>
+											<!--the angular frequency (omega) in radians/sec-->
+											<omega>1</omega>
+											<!--the phase shift of the sinusoidal function-->
+											<phase>1.5707963267949</phase>
+										</Sine>
+									</y_location>
+									<y_coordinate>shoulder_coord_0</y_coordinate>
+									<z_location>
+										<Constant>
+											<value>0</value>
+										</Constant>
+									</z_location>
+									<z_coordinate>shoulder_coord_0</z_coordinate>
+								</MovingPathPoint>
+								<PathPoint name="point2">
+									<location> -0.3 0 0</location>
+									<body>humerus</body>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+						<!--Used to display the path in the 3D window-->
+						<VisibleObject name="display">
+							<!--Set of geometry files and associated attributes, allow .vtp, .stl, .obj-->
+							<GeometrySet>
+								<objects />
+								<groups />
+							</GeometrySet>
+							<!--Three scale factors for display purposes: scaleX scaleY scaleZ-->
+							<scale_factors> 1 1 1</scale_factors>
+							<!--transform relative to owner specified as 3 rotations (rad) followed by 3 translations rX rY rZ tx ty tz-->
+							<transform> -0 0 -0 0 0 0</transform>
+							<!--Whether to show a coordinate frame-->
+							<show_axes>false</show_axes>
+							<!--Display Pref. 0:Hide 1:Wire 3:Flat 4:Shaded Can be overriden for individual geometries-->
+							<display_preference>4</display_preference>
+						</VisibleObject>
+					</GeometryPath>
+				</PathActuator>
+				<PathActuator name="muscle1R">
+					<!--The set of points defining the path of the muscle.-->
+					<GeometryPath>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<MovingPathPoint name="point1">
+									<location> 0 0 0</location>
+									<body>ground</body>
+									<x_location>
+										<Sine>
+											<!--amplitude of the sinusoidal function-->
+											<amplitude>-0.1</amplitude>
+											<!--the angular frequency (omega) in radians/sec-->
+											<omega>1</omega>
+											<!--the phase shift of the sinusoidal function-->
+											<phase>3.14159265358979</phase>
+										</Sine>
+									</x_location>
+									<x_coordinate>shoulder_coord_0</x_coordinate>
+									<y_location>
+										<Sine>
+											<!--amplitude of the sinusoidal function-->
+											<amplitude>-0.1</amplitude>
 											<!--the angular frequency (omega) in radians/sec-->
 											<omega>1</omega>
 											<!--the phase shift of the sinusoidal function-->

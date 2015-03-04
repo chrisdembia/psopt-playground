@@ -12,7 +12,7 @@ State* state;
 TwoLink::TwoLink() {
 
     model = new Model();
-    // TODO model->setUseVisualizer(true);
+    // model->setUseVisualizer(true);
 
     // Two links, with mass of 1 kg, center of mass at the
     // origin of the body's frame, and moments/products of inertia of zero.
@@ -39,8 +39,10 @@ TwoLink::TwoLink() {
     //Millard2012EquilibriumMuscle* muscle1 = new
     //    Millard2012EquilibriumMuscle("muscle1", 200, 0.6, 0.55, 0);
     //muscle1->setMuscleConfiguration(true, true, 0.000);
-    PathActuator* muscle1 = new PathActuator();
-    muscle1->setName("muscle1");
+    PathActuator* muscle1L = new PathActuator();
+    muscle1L->setName("muscle1L");
+    PathActuator* muscle1R = new PathActuator();
+    muscle1R->setName("muscle1R");
     //muscle1->addNewPathPoint("point1", ground, Vec3(-0.1, 0.0, 0));
     ////muscle1->addNewPathPoint("point2", *link1, Vec3(-1.0, 0.1, 0));
     //muscle1->addNewPathPoint("point3", *link1, Vec3(-0.3, 0.0, 0));
@@ -60,7 +62,8 @@ TwoLink::TwoLink() {
     // Add bodies and joints to the model.
     model->addBody(link1);
     model->addBody(link2);
-    model->addForce(muscle1);
+    model->addForce(muscle1L);
+    model->addForce(muscle1R);
     model->addForce(shoulderAct);
     model->addForce(elbowAct);
     //model->addController(brain);
@@ -78,21 +81,36 @@ TwoLink::TwoLink() {
     muscle1->updGeometryPath().adoptAndAppend(pp1);
     muscle1->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
     */
-    MovingPathPoint* pp1 = new MovingPathPoint();
-    pp1->setName("point1");
-    pp1->setBody(ground);
-    //pp1->setLocation(*state, Vec3(-0.1, 0.1, 0));
-    pp1->setXCoordinate(*state, model->updCoordinateSet()[0]);
-    Sine* xfunc = new Sine(0.1, 1, 0.25 * Pi + 0.5 * Pi); // Constant(-0.1);
-    pp1->setXFunction(*state, *xfunc);
-    pp1->setYCoordinate(*state, model->updCoordinateSet()[0]);
+    MovingPathPoint* pp1L = new MovingPathPoint();
+    pp1L->setName("point1");
+    pp1L->setBody(ground);
+    //pp1L->setLocation(*state, Vec3(-0.1, 0.1, 0));
+    pp1L->setXCoordinate(*state, model->updCoordinateSet()[0]);
+    Sine* xfunc = new Sine(0.1, 1, 0.5 * Pi + 0.5 * Pi); // Constant(-0.1);
+    pp1L->setXFunction(*state, *xfunc);
+    pp1L->setYCoordinate(*state, model->updCoordinateSet()[0]);
     Sine* yfunc = new Sine(0.1, 1, 0.5 * SimTK::Pi);
-    pp1->setYFunction(*state, *yfunc);
-    pp1->setZCoordinate(*state, model->updCoordinateSet()[0]);
+    pp1L->setYFunction(*state, *yfunc);
+    pp1L->setZCoordinate(*state, model->updCoordinateSet()[0]);
     Constant* zfunc = new Constant(0.0);
-    pp1->setZFunction(*state, *zfunc);
-    muscle1->updGeometryPath().updPathPointSet().adoptAndAppend(pp1);
-    muscle1->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
+    pp1L->setZFunction(*state, *zfunc);
+    muscle1L->updGeometryPath().updPathPointSet().adoptAndAppend(pp1L);
+    muscle1L->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
+
+    MovingPathPoint* pp1R = new MovingPathPoint();
+    pp1R->setName("point1");
+    pp1R->setBody(ground);
+    pp1R->setXCoordinate(*state, model->updCoordinateSet()[0]);
+    Sine* xfunc1R = new Sine(-0.1, 1, 0.5 * Pi + 0.5 * Pi);
+    pp1R->setXFunction(*state, *xfunc1R);
+    pp1R->setYCoordinate(*state, model->updCoordinateSet()[0]);
+    Sine* yfunc1R = new Sine(-0.1, 1, 0.5 * SimTK::Pi);
+    pp1R->setYFunction(*state, *yfunc1R);
+    pp1R->setZCoordinate(*state, model->updCoordinateSet()[0]);
+    Constant* zfunc1R = new Constant(0.0);
+    pp1R->setZFunction(*state, *zfunc1R);
+    muscle1R->updGeometryPath().updPathPointSet().adoptAndAppend(pp1R);
+    muscle1R->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
 
     model->print("mytwolink.osim");
 
