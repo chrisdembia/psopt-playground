@@ -9,10 +9,14 @@ using namespace OpenSim; using OpenSim::Body;
 Model* model;
 State* state;
 
+#define VIZ 1
+
 TwoLink::TwoLink() {
 
     model = new Model();
-    //model->setUseVisualizer(true);
+#if VIZ
+    model->setUseVisualizer(true);
+#endif
 
     // Two links, with mass of 1 kg, center of mass at the
     // origin of the body's frame, and moments/products of inertia of zero.
@@ -36,8 +40,8 @@ TwoLink::TwoLink() {
             *link1, Vec3(0, 0, 0), Vec3(0));
             */
 
-    //Millard2012EquilibriumMuscle* muscle1 = new
-    //    Millard2012EquilibriumMuscle("muscle1", 200, 0.6, 0.55, 0);
+    //Millard2012EquilibriumMuscle* muscle1L = new
+    //    Millard2012EquilibriumMuscle("muscle1L", 200, 0.6, 0.55, 0);
     //muscle1->setMuscleConfiguration(true, true, 0.000);
     PathActuator* muscle1L = new PathActuator();
     muscle1L->setName("muscle1L");
@@ -52,13 +56,15 @@ TwoLink::TwoLink() {
     //muscle1->addNewPathPoint("point3", *link1, Vec3(-0.3, 0.0, 0));
 
     /*
+    */
     // A controller that specifies the excitation of the biceps muscle.
     PrescribedController* brain = new PrescribedController();
-    brain->addActuator(*muscle1);
+    brain->addActuator(*muscle1L);
     // Muscle excitation is 0.3 for the first 0.5 seconds, and 1.0 thereafter.
-    brain->prescribeControlForActuator("muscle1",
-            new Constant(10000)); // new StepFunction(0.5, 3, 0.3, 1));
-    */
+    brain->prescribeControlForActuator("muscle1L",
+            new Constant(10)); // new StepFunction(0.5, 3, 0.3, 1));
+    //brain->prescribeControlForActuator("muscle1L",
+    //        new StepFunction(0.5, 3, 0.3, 1));
 
     //CoordinateActuator* shoulderAct = new CoordinateActuator("shoulder_coord_0");
     //CoordinateActuator* elbowAct = new CoordinateActuator("elbow_coord_0");
@@ -72,7 +78,7 @@ TwoLink::TwoLink() {
     model->addForce(muscle2R);
     //model->addForce(shoulderAct);
     //model->addForce(elbowAct);
-    //model->addController(brain);
+    model->addController(brain);
 
     state = &model->initSystem();
 
@@ -87,10 +93,12 @@ TwoLink::TwoLink() {
     muscle1->updGeometryPath().adoptAndAppend(pp1);
     muscle1->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
     */
+    muscle1L->addNewPathPoint("point0", ground, Vec3(0.5, 0.5, 0));
     MovingPathPoint* pp1L = new MovingPathPoint();
     pp1L->setName("point1");
-    pp1L->setBody(ground);
+    pp1L->setBody(*link1);
     //pp1L->setLocation(*state, Vec3(-0.1, 0.1, 0));
+    pp1L->setLocation(*state, Vec3(0.3, 0.3, 0));
     pp1L->setXCoordinate(*state, model->updCoordinateSet()[0]);
     Sine* xfunc = new Sine(0.1, 1, 0.5 * Pi + 0.5 * Pi); // Constant(-0.1);
     pp1L->setXFunction(*state, *xfunc);
@@ -151,15 +159,16 @@ TwoLink::TwoLink() {
     model->print("mytwolink.osim");
 
     state = &model->initSystem();
+    model->updCoordinateSet()[0].setValue(*state, -0.5 * Pi);
 
-    /*
+#if VIZ
     model->updMatterSubsystem().setShowDefaultGeometry(true);
 
     RungeKuttaMersonIntegrator integrator(model->getMultibodySystem());
     Manager manager(*model, integrator);
     manager.setInitialTime(0); manager.setFinalTime(10.0);
     manager.integrate(*state);
-    */
+#endif
 
 }
 

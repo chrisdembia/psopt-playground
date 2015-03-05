@@ -168,19 +168,19 @@
 		<!--Forces in the model.-->
 		<ForceSet>
 			<objects>
-				<Millard2012EquilibriumMuscle name="muscle1L">
-					<!--Minimum allowed value for control signal. Used primarily when solving for control values.-->
-					<min_control>0</min_control>
-					<!--Maximum allowed value for control signal. Used primarily when solving for control values.-->
-					<max_control>1</max_control>
+				<PathActuator name="muscle1L">
 					<!--The set of points defining the path of the muscle.-->
 					<GeometryPath>
 						<!--The set of points defining the path-->
 						<PathPointSet>
 							<objects>
-								<MovingPathPoint name="point1">
-									<location> 0 0 0</location>
+								<PathPoint name="point0">
+									<location> 0.5 0.5 0</location>
 									<body>ground</body>
+								</PathPoint>
+								<MovingPathPoint name="point1">
+									<location> 0.3 0.3 0</location>
+									<body>humerus</body>
 									<x_location>
 										<Sine>
 											<!--amplitude of the sinusoidal function-->
@@ -234,45 +234,7 @@
 							<display_preference>4</display_preference>
 						</VisibleObject>
 					</GeometryPath>
-					<!--Maximum isometric force that the fibers can generate-->
-					<max_isometric_force>200</max_isometric_force>
-					<!--Optimal length of the muscle fibers-->
-					<optimal_fiber_length>0.6</optimal_fiber_length>
-					<!--Resting length of the tendon-->
-					<tendon_slack_length>0.55</tendon_slack_length>
-					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
-					<pennation_angle_at_optimal>0</pennation_angle_at_optimal>
-					<!--Activation lower bound.-->
-					<minimum_activation>0.01</minimum_activation>
-					<!--Active-force-length curve.-->
-					<ActiveForceLengthCurve>
-						<!--Minimum value of the active-force-length curve-->
-						<minimum_value>0</minimum_value>
-					</ActiveForceLengthCurve>
-					<!--Force-velocity curve.-->
-					<ForceVelocityCurve>
-						<!--Curve slope at the maximum normalized concentric (shortening) velocity (normalized velocity of -1)-->
-						<concentric_slope_at_vmax>0</concentric_slope_at_vmax>
-						<!--Curve slope just before reaching concentric_slope_at_vmax-->
-						<concentric_slope_near_vmax>0.25</concentric_slope_near_vmax>
-						<!--Curve slope at isometric (normalized velocity of 0)-->
-						<isometric_slope>5</isometric_slope>
-						<!--Curve slope at the maximum normalized eccentric (lengthening) velocity (normalized velocity of 1)-->
-						<eccentric_slope_at_vmax>0</eccentric_slope_at_vmax>
-						<!--Curve slope just before reaching eccentric_slope_at_vmax-->
-						<eccentric_slope_near_vmax>0.15</eccentric_slope_near_vmax>
-						<!--Curve value at the maximum normalized eccentric contraction velocity-->
-						<max_eccentric_velocity_force_multiplier>1.4</max_eccentric_velocity_force_multiplier>
-					</ForceVelocityCurve>
-					<!--Passive-force-length curve.-->
-					<FiberForceLengthCurve>
-						<!--All properties of this object have their default values.-->
-					</FiberForceLengthCurve>
-					<!--Tendon-force-length curve.-->
-					<TendonForceLengthCurve>
-						<!--All properties of this object have their default values.-->
-					</TendonForceLengthCurve>
-				</Millard2012EquilibriumMuscle>
+				</PathActuator>
 				<PathActuator name="muscle1R">
 					<!--The set of points defining the path of the muscle.-->
 					<GeometryPath>
@@ -485,7 +447,7 @@
 					<FunctionSet name="ControlFunctions">
 						<objects>
 							<Constant>
-								<value>1000</value>
+								<value>10</value>
 							</Constant>
 						</objects>
 						<groups />
