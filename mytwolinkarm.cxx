@@ -456,7 +456,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
     problem.phases(1).bounds.lower.events(4) = 0.0;
     */
 
-    problem.phases(1).bounds.lower.states(1) = -pi;
+    problem.phases(1).bounds.lower.states(1) = -0.5 * pi;
     problem.phases(1).bounds.lower.states(2) = -pi;
     problem.phases(1).bounds.lower.states(3) = -100 * pi;
     problem.phases(1).bounds.lower.states(4) = -100 * pi;

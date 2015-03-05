@@ -174,44 +174,24 @@
 						<!--The set of points defining the path-->
 						<PathPointSet>
 							<objects>
-								<PathPoint name="point0">
-									<location> 0.5 0.5 0</location>
+								<PathPoint name="point1">
+									<location> -0.1 0.1 0</location>
 									<body>ground</body>
 								</PathPoint>
-								<MovingPathPoint name="point1">
-									<location> 0.3 0.3 0</location>
-									<body>humerus</body>
-									<x_location>
-										<Sine>
-											<!--amplitude of the sinusoidal function-->
-											<amplitude>0.1</amplitude>
-											<!--the angular frequency (omega) in radians/sec-->
-											<omega>1</omega>
-											<!--the phase shift of the sinusoidal function-->
-											<phase>3.14159265358979</phase>
-										</Sine>
-									</x_location>
-									<x_coordinate>shoulder_coord_0</x_coordinate>
-									<y_location>
-										<Sine>
-											<!--amplitude of the sinusoidal function-->
-											<amplitude>0.1</amplitude>
-											<!--the angular frequency (omega) in radians/sec-->
-											<omega>1</omega>
-											<!--the phase shift of the sinusoidal function-->
-											<phase>1.5707963267949</phase>
-										</Sine>
-									</y_location>
-									<y_coordinate>shoulder_coord_0</y_coordinate>
-									<z_location>
-										<Constant>
-											<value>0</value>
-										</Constant>
-									</z_location>
-									<z_coordinate>shoulder_coord_0</z_coordinate>
-								</MovingPathPoint>
-								<PathPoint name="point2">
-									<location> -0.3 0 0</location>
+								<ConditionalPathPoint name="pp1L2">
+									<location> 0.1 0.1 0</location>
+									<body>ground</body>
+									<range> -inf 0</range>
+									<coordinate>shoulder_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<ConditionalPathPoint name="pp1L3">
+									<location> 0.1 -0.1 0</location>
+									<body>ground</body>
+									<range> -inf -1.5708</range>
+									<coordinate>shoulder_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<PathPoint name="point4">
+									<location> -0.3 0.1 0</location>
 									<body>humerus</body>
 								</PathPoint>
 							</objects>
@@ -241,40 +221,24 @@
 						<!--The set of points defining the path-->
 						<PathPointSet>
 							<objects>
-								<MovingPathPoint name="point1">
-									<location> 0 0 0</location>
+								<PathPoint name="point1">
+									<location> -0.1 -0.1 0</location>
 									<body>ground</body>
-									<x_location>
-										<Sine>
-											<!--amplitude of the sinusoidal function-->
-											<amplitude>-0.1</amplitude>
-											<!--the angular frequency (omega) in radians/sec-->
-											<omega>1</omega>
-											<!--the phase shift of the sinusoidal function-->
-											<phase>3.14159265358979</phase>
-										</Sine>
-									</x_location>
-									<x_coordinate>shoulder_coord_0</x_coordinate>
-									<y_location>
-										<Sine>
-											<!--amplitude of the sinusoidal function-->
-											<amplitude>-0.1</amplitude>
-											<!--the angular frequency (omega) in radians/sec-->
-											<omega>1</omega>
-											<!--the phase shift of the sinusoidal function-->
-											<phase>1.5707963267949</phase>
-										</Sine>
-									</y_location>
-									<y_coordinate>shoulder_coord_0</y_coordinate>
-									<z_location>
-										<Constant>
-											<value>0</value>
-										</Constant>
-									</z_location>
-									<z_coordinate>shoulder_coord_0</z_coordinate>
-								</MovingPathPoint>
-								<PathPoint name="point2">
-									<location> -0.3 0 0</location>
+								</PathPoint>
+								<ConditionalPathPoint name="pp1R2">
+									<location> 0.1 -0.1 0</location>
+									<body>ground</body>
+									<range> 0 inf</range>
+									<coordinate>shoulder_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<ConditionalPathPoint name="pp1R3">
+									<location> 0.1 0.1 0</location>
+									<body>ground</body>
+									<range> 0 inf</range>
+									<coordinate>shoulder_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<PathPoint name="point4">
+									<location> -0.3 -0.1 0</location>
 									<body>humerus</body>
 								</PathPoint>
 							</objects>
@@ -301,48 +265,6 @@
 				<PathActuator name="muscle2L">
 					<!--The set of points defining the path of the muscle.-->
 					<GeometryPath>
-						<!--The set of points defining the path-->
-						<PathPointSet>
-							<objects>
-								<MovingPathPoint name="point1">
-									<location> 0 0 0</location>
-									<body>humerus</body>
-									<x_location>
-										<Sine>
-											<!--amplitude of the sinusoidal function-->
-											<amplitude>0.1</amplitude>
-											<!--the angular frequency (omega) in radians/sec-->
-											<omega>1</omega>
-											<!--the phase shift of the sinusoidal function-->
-											<phase>3.14159265358979</phase>
-										</Sine>
-									</x_location>
-									<x_coordinate>elbow_coord_0</x_coordinate>
-									<y_location>
-										<Sine>
-											<!--amplitude of the sinusoidal function-->
-											<amplitude>0.1</amplitude>
-											<!--the angular frequency (omega) in radians/sec-->
-											<omega>1</omega>
-											<!--the phase shift of the sinusoidal function-->
-											<phase>1.5707963267949</phase>
-										</Sine>
-									</y_location>
-									<y_coordinate>elbow_coord_0</y_coordinate>
-									<z_location>
-										<Constant>
-											<value>0</value>
-										</Constant>
-									</z_location>
-									<z_coordinate>elbow_coord_0</z_coordinate>
-								</MovingPathPoint>
-								<PathPoint name="point2">
-									<location> -0.3 0 0</location>
-									<body>radius</body>
-								</PathPoint>
-							</objects>
-							<groups />
-						</PathPointSet>
 						<!--Used to display the path in the 3D window-->
 						<VisibleObject name="display">
 							<!--Set of geometry files and associated attributes, allow .vtp, .stl, .obj-->
@@ -364,48 +286,6 @@
 				<PathActuator name="muscle2R">
 					<!--The set of points defining the path of the muscle.-->
 					<GeometryPath>
-						<!--The set of points defining the path-->
-						<PathPointSet>
-							<objects>
-								<MovingPathPoint name="point1">
-									<location> 0 0 0</location>
-									<body>humerus</body>
-									<x_location>
-										<Sine>
-											<!--amplitude of the sinusoidal function-->
-											<amplitude>-0.1</amplitude>
-											<!--the angular frequency (omega) in radians/sec-->
-											<omega>1</omega>
-											<!--the phase shift of the sinusoidal function-->
-											<phase>3.14159265358979</phase>
-										</Sine>
-									</x_location>
-									<x_coordinate>elbow_coord_0</x_coordinate>
-									<y_location>
-										<Sine>
-											<!--amplitude of the sinusoidal function-->
-											<amplitude>-0.1</amplitude>
-											<!--the angular frequency (omega) in radians/sec-->
-											<omega>1</omega>
-											<!--the phase shift of the sinusoidal function-->
-											<phase>1.5707963267949</phase>
-										</Sine>
-									</y_location>
-									<y_coordinate>elbow_coord_0</y_coordinate>
-									<z_location>
-										<Constant>
-											<value>0</value>
-										</Constant>
-									</z_location>
-									<z_coordinate>elbow_coord_0</z_coordinate>
-								</MovingPathPoint>
-								<PathPoint name="point2">
-									<location> -0.3 0 0</location>
-									<body>radius</body>
-								</PathPoint>
-							</objects>
-							<groups />
-						</PathPointSet>
 						<!--Used to display the path in the 3D window-->
 						<VisibleObject name="display">
 							<!--Set of geometry files and associated attributes, allow .vtp, .stl, .obj-->
@@ -442,12 +322,12 @@
 			<objects>
 				<PrescribedController>
 					<!--The list of model actuators that this controller will control.The keyword ALL indicates the controller will controll all the acuators in the model-->
-					<actuator_list>muscle1L</actuator_list>
+					<actuator_list>muscle1R</actuator_list>
 					<!--Functions (one per control) describing the controls for actuatorsspecified for this controller.-->
 					<FunctionSet name="ControlFunctions">
 						<objects>
 							<Constant>
-								<value>10</value>
+								<value>100</value>
 							</Constant>
 						</objects>
 						<groups />

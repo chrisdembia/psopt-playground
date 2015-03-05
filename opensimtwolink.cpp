@@ -62,7 +62,7 @@ TwoLink::TwoLink() {
     brain->addActuator(*muscle1L);
     // Muscle excitation is 0.3 for the first 0.5 seconds, and 1.0 thereafter.
     brain->prescribeControlForActuator("muscle1L",
-            new Constant(10)); // new StepFunction(0.5, 3, 0.3, 1));
+            new Constant(100)); // new StepFunction(0.5, 3, 0.3, 1));
     //brain->prescribeControlForActuator("muscle1L",
     //        new StepFunction(0.5, 3, 0.3, 1));
 
@@ -82,79 +82,43 @@ TwoLink::TwoLink() {
 
     state = &model->initSystem();
 
-    /*
-    muscle1->addNewPathPoint("point1", ground, Vec3(-0.1, 0.1, 0));
-    muscle1->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
-    ConditionalPathPoint* pp1 = new ConditionalPathPoint();
-    pp1->setBody(ground);
-    pp1->setLocation(*state, Vec3(-0.1, 0.1, 0));
-    pp1->setCoordinate(*state, model->updCoordinateSet()[0]);
-    pp1->setRangeMin(*state, 
-    muscle1->updGeometryPath().adoptAndAppend(pp1);
-    muscle1->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
-    */
-    muscle1L->addNewPathPoint("point0", ground, Vec3(0.5, 0.5, 0));
-    MovingPathPoint* pp1L = new MovingPathPoint();
-    pp1L->setName("point1");
-    pp1L->setBody(*link1);
-    //pp1L->setLocation(*state, Vec3(-0.1, 0.1, 0));
-    pp1L->setLocation(*state, Vec3(0.3, 0.3, 0));
-    pp1L->setXCoordinate(*state, model->updCoordinateSet()[0]);
-    Sine* xfunc = new Sine(0.1, 1, 0.5 * Pi + 0.5 * Pi); // Constant(-0.1);
-    pp1L->setXFunction(*state, *xfunc);
-    pp1L->setYCoordinate(*state, model->updCoordinateSet()[0]);
-    Sine* yfunc = new Sine(0.1, 1, 0.5 * SimTK::Pi);
-    pp1L->setYFunction(*state, *yfunc);
-    pp1L->setZCoordinate(*state, model->updCoordinateSet()[0]);
-    Constant* zfunc = new Constant(0.0);
-    pp1L->setZFunction(*state, *zfunc);
-    muscle1L->updGeometryPath().updPathPointSet().adoptAndAppend(pp1L);
-    muscle1L->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
+    muscle1L->addNewPathPoint("point1", ground, Vec3(-0.1, 0.1, 0));
+    ConditionalPathPoint* pp1L2 = new ConditionalPathPoint();
+    pp1L2->setName("pp1L2");
+    pp1L2->setBody(ground);
+    pp1L2->setLocation(*state, Vec3(0.1, 0.1, 0));
+    pp1L2->setCoordinate(*state, model->updCoordinateSet()[0]);
+    pp1L2->setRangeMin(*state, -Infinity);
+    pp1L2->setRangeMax(*state, 0.0);
+    muscle1L->updGeometryPath().updPathPointSet().adoptAndAppend(pp1L2);
+    ConditionalPathPoint* pp1L3 = new ConditionalPathPoint();
+    pp1L3->setName("pp1L3");
+    pp1L3->setBody(ground);
+    pp1L3->setLocation(*state, Vec3(0.1, -0.1, 0));
+    pp1L3->setCoordinate(*state, model->updCoordinateSet()[0]);
+    pp1L3->setRangeMin(*state, -Infinity);
+    pp1L3->setRangeMax(*state, -0.5 * Pi);
+    muscle1L->updGeometryPath().updPathPointSet().adoptAndAppend(pp1L3);
+    muscle1L->addNewPathPoint("point4", *link1, Vec3(-0.3, 0.1, 0));
 
-    MovingPathPoint* pp1R = new MovingPathPoint();
-    pp1R->setName("point1");
-    pp1R->setBody(ground);
-    pp1R->setXCoordinate(*state, model->updCoordinateSet()[0]);
-    Sine* xfunc1R = new Sine(-0.1, 1, 0.5 * Pi + 0.5 * Pi);
-    pp1R->setXFunction(*state, *xfunc1R);
-    pp1R->setYCoordinate(*state, model->updCoordinateSet()[0]);
-    Sine* yfunc1R = new Sine(-0.1, 1, 0.5 * SimTK::Pi);
-    pp1R->setYFunction(*state, *yfunc1R);
-    pp1R->setZCoordinate(*state, model->updCoordinateSet()[0]);
-    Constant* zfunc1R = new Constant(0.0);
-    pp1R->setZFunction(*state, *zfunc1R);
-    muscle1R->updGeometryPath().updPathPointSet().adoptAndAppend(pp1R);
-    muscle1R->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
-
-    MovingPathPoint* pp2L = new MovingPathPoint();
-    pp2L->setName("point1");
-    pp2L->setBody(*link1);
-    pp2L->setXCoordinate(*state, model->updCoordinateSet()[1]);
-    Sine* xfunc2L = new Sine(0.1, 1, 0.5 * Pi + 0.5 * Pi); // Constant(-0.1);
-    pp2L->setXFunction(*state, *xfunc2L);
-    pp2L->setYCoordinate(*state, model->updCoordinateSet()[1]);
-    Sine* yfunc2L = new Sine(0.1, 1, 0.5 * SimTK::Pi);
-    pp2L->setYFunction(*state, *yfunc2L);
-    pp2L->setZCoordinate(*state, model->updCoordinateSet()[1]);
-    Constant* zfunc2L = new Constant(0.0);
-    pp2L->setZFunction(*state, *zfunc2L);
-    muscle2L->updGeometryPath().updPathPointSet().adoptAndAppend(pp2L);
-    muscle2L->addNewPathPoint("point2", *link2, Vec3(-0.3, 0.0, 0));
-
-    MovingPathPoint* pp2R = new MovingPathPoint();
-    pp2R->setName("point1");
-    pp2R->setBody(*link1);
-    pp2R->setXCoordinate(*state, model->updCoordinateSet()[1]);
-    Sine* xfunc2R = new Sine(-0.1, 1, 0.5 * Pi + 0.5 * Pi);
-    pp2R->setXFunction(*state, *xfunc2R);
-    pp2R->setYCoordinate(*state, model->updCoordinateSet()[1]);
-    Sine* yfunc2R = new Sine(-0.1, 1, 0.5 * SimTK::Pi);
-    pp2R->setYFunction(*state, *yfunc2R);
-    pp2R->setZCoordinate(*state, model->updCoordinateSet()[1]);
-    Constant* zfunc2R = new Constant(0.0);
-    pp2R->setZFunction(*state, *zfunc2R);
-    muscle2R->updGeometryPath().updPathPointSet().adoptAndAppend(pp2R);
-    muscle2R->addNewPathPoint("point2", *link2, Vec3(-0.3, 0.0, 0));
+    muscle1R->addNewPathPoint("point1", ground, Vec3(-0.1, -0.1, 0));
+    ConditionalPathPoint* pp1R2 = new ConditionalPathPoint();
+    pp1R2->setName("pp1R2");
+    pp1R2->setBody(ground);
+    pp1R2->setLocation(*state, Vec3(0.1, -0.1, 0));
+    pp1R2->setCoordinate(*state, model->updCoordinateSet()[0]);
+    pp1R2->setRangeMin(*state, 0.0);
+    pp1R2->setRangeMax(*state, Infinity);
+    muscle1R->updGeometryPath().updPathPointSet().adoptAndAppend(pp1R2);
+    ConditionalPathPoint* pp1R3 = new ConditionalPathPoint();
+    pp1R3->setName("pp1R3");
+    pp1R3->setBody(ground);
+    pp1R3->setLocation(*state, Vec3(0.1, 0.1, 0));
+    pp1R3->setCoordinate(*state, model->updCoordinateSet()[0]);
+    pp1R3->setRangeMin(*state, 0.5 * Pi);
+    pp1R3->setRangeMax(*state, Infinity);
+    muscle1R->updGeometryPath().updPathPointSet().adoptAndAppend(pp1R3);
+    muscle1R->addNewPathPoint("point4", *link1, Vec3(-0.3, -0.1, 0));
 
     model->print("mytwolink.osim");
 
