@@ -33,3 +33,6 @@ end
 plot([0 X1(i)], [0 Y1(i)]);
 plot([X1(i) X2(i)], [Y1(i) Y2(i)]);
 
+figure;
+plot(time, control);
+legend('1', '2', '3');

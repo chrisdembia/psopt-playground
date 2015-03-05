@@ -40,7 +40,7 @@ adouble integrand_cost(adouble* states, adouble* controls,
                        adouble* parameters, adouble& time, adouble* xad, 
                        int iphase)
 {
-    return  0.001 * (pow(controls[0], 2) + pow(controls[1], 2));
+    return  0.001 * (pow(controls[0], 2) + pow(controls[1], 2) + pow(controls[2], 2) + pow(controls[3], 2));
 } 
 
 //////////////////////////////////////////////////////////////////////////
@@ -61,13 +61,13 @@ void dae_opensim(adouble* derivatives, adouble* path, adouble* states,
 {
     double dderivatives[4];
     double dstates[4];
-    double dcontrols[3];
+    double dcontrols[4];
     double dtime;
     trace_on(100);
     for (int i = 0; i < 4; ++i) {
         states[i] >>= dstates[i];
     }
-    for (int i = 0; i < 3; ++i) {
+    for (int i = 0; i < 4; ++i) {
         controls[i] >>= dcontrols[i];
     }
     time >>= dtime;
@@ -419,7 +419,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
 /////////////////////////////////////////////////////////////////////////////
 
     problem.phases(1).nstates   		= 4;
-    problem.phases(1).ncontrols 		= 3;
+    problem.phases(1).ncontrols 		= 4;
     problem.phases(1).nevents   		= 8;
     problem.phases(1).npath     		= 0;
     problem.phases(1).nodes             = 40;  
@@ -468,11 +468,14 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
 
     problem.phases(1).bounds.lower.controls(1) = 0.0;
     problem.phases(1).bounds.lower.controls(2) = 0.0;
-    problem.phases(1).bounds.lower.controls(3) = -1000.0;
+    problem.phases(1).bounds.lower.controls(3) = 0.0;
+    problem.phases(1).bounds.lower.controls(4) = 0.0;
+    //problem.phases(1).bounds.lower.controls(3) = -1000.0;
 
     problem.phases(1).bounds.upper.controls(1) = 100.0;
     problem.phases(1).bounds.upper.controls(2) = 100.0;
-    problem.phases(1).bounds.upper.controls(3) = 1000.0;
+    problem.phases(1).bounds.upper.controls(3) = 100.0;
+    problem.phases(1).bounds.upper.controls(4) = 100.0;
 
     problem.phases(1).bounds.lower.events(1) = 0.0;
     problem.phases(1).bounds.lower.events(2) = 0.0;
@@ -540,6 +543,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
     algorithm.derivatives                 = "numerical"; //"automatic";
     algorithm.nlp_iter_max                = 1000;
     algorithm.nlp_tolerance               = 1.e-6;
+    //algorithm.ode_tolerance               = 1.e-4;
 
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////  Now call PSOPT to solve the problem   /////////////////

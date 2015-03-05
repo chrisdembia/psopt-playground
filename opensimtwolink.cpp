@@ -12,7 +12,7 @@ State* state;
 TwoLink::TwoLink() {
 
     model = new Model();
-    // model->setUseVisualizer(true);
+    //model->setUseVisualizer(true);
 
     // Two links, with mass of 1 kg, center of mass at the
     // origin of the body's frame, and moments/products of inertia of zero.
@@ -43,6 +43,10 @@ TwoLink::TwoLink() {
     muscle1L->setName("muscle1L");
     PathActuator* muscle1R = new PathActuator();
     muscle1R->setName("muscle1R");
+    PathActuator* muscle2L = new PathActuator();
+    muscle2L->setName("muscle2L");
+    PathActuator* muscle2R = new PathActuator();
+    muscle2R->setName("muscle2R");
     //muscle1->addNewPathPoint("point1", ground, Vec3(-0.1, 0.0, 0));
     ////muscle1->addNewPathPoint("point2", *link1, Vec3(-1.0, 0.1, 0));
     //muscle1->addNewPathPoint("point3", *link1, Vec3(-0.3, 0.0, 0));
@@ -56,16 +60,18 @@ TwoLink::TwoLink() {
             new Constant(10000)); // new StepFunction(0.5, 3, 0.3, 1));
     */
 
-    CoordinateActuator* shoulderAct = new CoordinateActuator("shoulder_coord_0");
-    CoordinateActuator* elbowAct = new CoordinateActuator("elbow_coord_0");
+    //CoordinateActuator* shoulderAct = new CoordinateActuator("shoulder_coord_0");
+    //CoordinateActuator* elbowAct = new CoordinateActuator("elbow_coord_0");
 
     // Add bodies and joints to the model.
     model->addBody(link1);
     model->addBody(link2);
     model->addForce(muscle1L);
     model->addForce(muscle1R);
+    model->addForce(muscle2L);
+    model->addForce(muscle2R);
     //model->addForce(shoulderAct);
-    model->addForce(elbowAct);
+    //model->addForce(elbowAct);
     //model->addController(brain);
 
     state = &model->initSystem();
@@ -112,6 +118,36 @@ TwoLink::TwoLink() {
     muscle1R->updGeometryPath().updPathPointSet().adoptAndAppend(pp1R);
     muscle1R->addNewPathPoint("point2", *link1, Vec3(-0.3, 0.0, 0));
 
+    MovingPathPoint* pp2L = new MovingPathPoint();
+    pp2L->setName("point1");
+    pp2L->setBody(*link1);
+    pp2L->setXCoordinate(*state, model->updCoordinateSet()[1]);
+    Sine* xfunc2L = new Sine(0.1, 1, 0.5 * Pi + 0.5 * Pi); // Constant(-0.1);
+    pp2L->setXFunction(*state, *xfunc2L);
+    pp2L->setYCoordinate(*state, model->updCoordinateSet()[1]);
+    Sine* yfunc2L = new Sine(0.1, 1, 0.5 * SimTK::Pi);
+    pp2L->setYFunction(*state, *yfunc2L);
+    pp2L->setZCoordinate(*state, model->updCoordinateSet()[1]);
+    Constant* zfunc2L = new Constant(0.0);
+    pp2L->setZFunction(*state, *zfunc2L);
+    muscle2L->updGeometryPath().updPathPointSet().adoptAndAppend(pp2L);
+    muscle2L->addNewPathPoint("point2", *link2, Vec3(-0.3, 0.0, 0));
+
+    MovingPathPoint* pp2R = new MovingPathPoint();
+    pp2R->setName("point1");
+    pp2R->setBody(*link1);
+    pp2R->setXCoordinate(*state, model->updCoordinateSet()[1]);
+    Sine* xfunc2R = new Sine(-0.1, 1, 0.5 * Pi + 0.5 * Pi);
+    pp2R->setXFunction(*state, *xfunc2R);
+    pp2R->setYCoordinate(*state, model->updCoordinateSet()[1]);
+    Sine* yfunc2R = new Sine(-0.1, 1, 0.5 * SimTK::Pi);
+    pp2R->setYFunction(*state, *yfunc2R);
+    pp2R->setZCoordinate(*state, model->updCoordinateSet()[1]);
+    Constant* zfunc2R = new Constant(0.0);
+    pp2R->setZFunction(*state, *zfunc2R);
+    muscle2R->updGeometryPath().updPathPointSet().adoptAndAppend(pp2R);
+    muscle2R->addNewPathPoint("point2", *link2, Vec3(-0.3, 0.0, 0));
+
     model->print("mytwolink.osim");
 
     state = &model->initSystem();
@@ -133,7 +169,7 @@ void TwoLink::dae(double* derivatives, double* path, double* states,
 
     State s = *state;
     model->getMultibodySystem().realize(s, SimTK::Stage::Position);
-    model->setControls(s, SimTK::Vector(3, controls));
+    model->setControls(s, SimTK::Vector(4, controls));
     model->getCoordinateSet()[0].setValue(s, states[0]);
     model->getCoordinateSet()[1].setValue(s, states[1]);
     model->getCoordinateSet()[0].setSpeedValue(s, states[2]);

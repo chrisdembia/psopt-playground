@@ -168,7 +168,11 @@
 		<!--Forces in the model.-->
 		<ForceSet>
 			<objects>
-				<PathActuator name="muscle1L">
+				<Millard2012EquilibriumMuscle name="muscle1L">
+					<!--Minimum allowed value for control signal. Used primarily when solving for control values.-->
+					<min_control>0</min_control>
+					<!--Maximum allowed value for control signal. Used primarily when solving for control values.-->
+					<max_control>1</max_control>
 					<!--The set of points defining the path of the muscle.-->
 					<GeometryPath>
 						<!--The set of points defining the path-->
@@ -230,7 +234,45 @@
 							<display_preference>4</display_preference>
 						</VisibleObject>
 					</GeometryPath>
-				</PathActuator>
+					<!--Maximum isometric force that the fibers can generate-->
+					<max_isometric_force>200</max_isometric_force>
+					<!--Optimal length of the muscle fibers-->
+					<optimal_fiber_length>0.6</optimal_fiber_length>
+					<!--Resting length of the tendon-->
+					<tendon_slack_length>0.55</tendon_slack_length>
+					<!--Angle between tendon and fibers at optimal fiber length expressed in radians-->
+					<pennation_angle_at_optimal>0</pennation_angle_at_optimal>
+					<!--Activation lower bound.-->
+					<minimum_activation>0.01</minimum_activation>
+					<!--Active-force-length curve.-->
+					<ActiveForceLengthCurve>
+						<!--Minimum value of the active-force-length curve-->
+						<minimum_value>0</minimum_value>
+					</ActiveForceLengthCurve>
+					<!--Force-velocity curve.-->
+					<ForceVelocityCurve>
+						<!--Curve slope at the maximum normalized concentric (shortening) velocity (normalized velocity of -1)-->
+						<concentric_slope_at_vmax>0</concentric_slope_at_vmax>
+						<!--Curve slope just before reaching concentric_slope_at_vmax-->
+						<concentric_slope_near_vmax>0.25</concentric_slope_near_vmax>
+						<!--Curve slope at isometric (normalized velocity of 0)-->
+						<isometric_slope>5</isometric_slope>
+						<!--Curve slope at the maximum normalized eccentric (lengthening) velocity (normalized velocity of 1)-->
+						<eccentric_slope_at_vmax>0</eccentric_slope_at_vmax>
+						<!--Curve slope just before reaching eccentric_slope_at_vmax-->
+						<eccentric_slope_near_vmax>0.15</eccentric_slope_near_vmax>
+						<!--Curve value at the maximum normalized eccentric contraction velocity-->
+						<max_eccentric_velocity_force_multiplier>1.4</max_eccentric_velocity_force_multiplier>
+					</ForceVelocityCurve>
+					<!--Passive-force-length curve.-->
+					<FiberForceLengthCurve>
+						<!--All properties of this object have their default values.-->
+					</FiberForceLengthCurve>
+					<!--Tendon-force-length curve.-->
+					<TendonForceLengthCurve>
+						<!--All properties of this object have their default values.-->
+					</TendonForceLengthCurve>
+				</Millard2012EquilibriumMuscle>
 				<PathActuator name="muscle1R">
 					<!--The set of points defining the path of the muscle.-->
 					<GeometryPath>
@@ -294,10 +336,132 @@
 						</VisibleObject>
 					</GeometryPath>
 				</PathActuator>
-				<CoordinateActuator>
-					<!--Name of the generalized coordinate to which the actuator applies.-->
-					<coordinate>elbow_coord_0</coordinate>
-				</CoordinateActuator>
+				<PathActuator name="muscle2L">
+					<!--The set of points defining the path of the muscle.-->
+					<GeometryPath>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<MovingPathPoint name="point1">
+									<location> 0 0 0</location>
+									<body>humerus</body>
+									<x_location>
+										<Sine>
+											<!--amplitude of the sinusoidal function-->
+											<amplitude>0.1</amplitude>
+											<!--the angular frequency (omega) in radians/sec-->
+											<omega>1</omega>
+											<!--the phase shift of the sinusoidal function-->
+											<phase>3.14159265358979</phase>
+										</Sine>
+									</x_location>
+									<x_coordinate>elbow_coord_0</x_coordinate>
+									<y_location>
+										<Sine>
+											<!--amplitude of the sinusoidal function-->
+											<amplitude>0.1</amplitude>
+											<!--the angular frequency (omega) in radians/sec-->
+											<omega>1</omega>
+											<!--the phase shift of the sinusoidal function-->
+											<phase>1.5707963267949</phase>
+										</Sine>
+									</y_location>
+									<y_coordinate>elbow_coord_0</y_coordinate>
+									<z_location>
+										<Constant>
+											<value>0</value>
+										</Constant>
+									</z_location>
+									<z_coordinate>elbow_coord_0</z_coordinate>
+								</MovingPathPoint>
+								<PathPoint name="point2">
+									<location> -0.3 0 0</location>
+									<body>radius</body>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+						<!--Used to display the path in the 3D window-->
+						<VisibleObject name="display">
+							<!--Set of geometry files and associated attributes, allow .vtp, .stl, .obj-->
+							<GeometrySet>
+								<objects />
+								<groups />
+							</GeometrySet>
+							<!--Three scale factors for display purposes: scaleX scaleY scaleZ-->
+							<scale_factors> 1 1 1</scale_factors>
+							<!--transform relative to owner specified as 3 rotations (rad) followed by 3 translations rX rY rZ tx ty tz-->
+							<transform> -0 0 -0 0 0 0</transform>
+							<!--Whether to show a coordinate frame-->
+							<show_axes>false</show_axes>
+							<!--Display Pref. 0:Hide 1:Wire 3:Flat 4:Shaded Can be overriden for individual geometries-->
+							<display_preference>4</display_preference>
+						</VisibleObject>
+					</GeometryPath>
+				</PathActuator>
+				<PathActuator name="muscle2R">
+					<!--The set of points defining the path of the muscle.-->
+					<GeometryPath>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<MovingPathPoint name="point1">
+									<location> 0 0 0</location>
+									<body>humerus</body>
+									<x_location>
+										<Sine>
+											<!--amplitude of the sinusoidal function-->
+											<amplitude>-0.1</amplitude>
+											<!--the angular frequency (omega) in radians/sec-->
+											<omega>1</omega>
+											<!--the phase shift of the sinusoidal function-->
+											<phase>3.14159265358979</phase>
+										</Sine>
+									</x_location>
+									<x_coordinate>elbow_coord_0</x_coordinate>
+									<y_location>
+										<Sine>
+											<!--amplitude of the sinusoidal function-->
+											<amplitude>-0.1</amplitude>
+											<!--the angular frequency (omega) in radians/sec-->
+											<omega>1</omega>
+											<!--the phase shift of the sinusoidal function-->
+											<phase>1.5707963267949</phase>
+										</Sine>
+									</y_location>
+									<y_coordinate>elbow_coord_0</y_coordinate>
+									<z_location>
+										<Constant>
+											<value>0</value>
+										</Constant>
+									</z_location>
+									<z_coordinate>elbow_coord_0</z_coordinate>
+								</MovingPathPoint>
+								<PathPoint name="point2">
+									<location> -0.3 0 0</location>
+									<body>radius</body>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
+						<!--Used to display the path in the 3D window-->
+						<VisibleObject name="display">
+							<!--Set of geometry files and associated attributes, allow .vtp, .stl, .obj-->
+							<GeometrySet>
+								<objects />
+								<groups />
+							</GeometrySet>
+							<!--Three scale factors for display purposes: scaleX scaleY scaleZ-->
+							<scale_factors> 1 1 1</scale_factors>
+							<!--transform relative to owner specified as 3 rotations (rad) followed by 3 translations rX rY rZ tx ty tz-->
+							<transform> -0 0 -0 0 0 0</transform>
+							<!--Whether to show a coordinate frame-->
+							<show_axes>false</show_axes>
+							<!--Display Pref. 0:Hide 1:Wire 3:Flat 4:Shaded Can be overriden for individual geometries-->
+							<display_preference>4</display_preference>
+						</VisibleObject>
+					</GeometryPath>
+				</PathActuator>
 			</objects>
 			<groups />
 		</ForceSet>
@@ -313,7 +477,21 @@
 		</ContactGeometrySet>
 		<!--Controllers in the model.-->
 		<ControllerSet name="Controllers">
-			<objects />
+			<objects>
+				<PrescribedController>
+					<!--The list of model actuators that this controller will control.The keyword ALL indicates the controller will controll all the acuators in the model-->
+					<actuator_list>muscle1L</actuator_list>
+					<!--Functions (one per control) describing the controls for actuatorsspecified for this controller.-->
+					<FunctionSet name="ControlFunctions">
+						<objects>
+							<Constant>
+								<value>1000</value>
+							</Constant>
+						</objects>
+						<groups />
+					</FunctionSet>
+				</PrescribedController>
+			</objects>
 			<groups />
 		</ControllerSet>
 		<!--Additional components in the model.-->
