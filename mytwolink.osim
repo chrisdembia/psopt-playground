@@ -232,7 +232,7 @@
 									<coordinate>shoulder_coord_0</coordinate>
 								</ConditionalPathPoint>
 								<ConditionalPathPoint name="pp1R3">
-									<location> 0.1 0.1 0</location>
+									<location> 0.2 0.1 0</location>
 									<body>ground</body>
 									<range> 0 inf</range>
 									<coordinate>shoulder_coord_0</coordinate>
@@ -322,12 +322,12 @@
 			<objects>
 				<PrescribedController>
 					<!--The list of model actuators that this controller will control.The keyword ALL indicates the controller will controll all the acuators in the model-->
-					<actuator_list>muscle1R</actuator_list>
+					<actuator_list>muscle1L</actuator_list>
 					<!--Functions (one per control) describing the controls for actuatorsspecified for this controller.-->
 					<FunctionSet name="ControlFunctions">
 						<objects>
 							<Constant>
-								<value>100</value>
+								<value>130</value>
 							</Constant>
 						</objects>
 						<groups />

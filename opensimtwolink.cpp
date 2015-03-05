@@ -51,9 +51,6 @@ TwoLink::TwoLink() {
     muscle2L->setName("muscle2L");
     PathActuator* muscle2R = new PathActuator();
     muscle2R->setName("muscle2R");
-    //muscle1->addNewPathPoint("point1", ground, Vec3(-0.1, 0.0, 0));
-    ////muscle1->addNewPathPoint("point2", *link1, Vec3(-1.0, 0.1, 0));
-    //muscle1->addNewPathPoint("point3", *link1, Vec3(-0.3, 0.0, 0));
 
     /*
     */
@@ -62,7 +59,7 @@ TwoLink::TwoLink() {
     brain->addActuator(*muscle1L);
     // Muscle excitation is 0.3 for the first 0.5 seconds, and 1.0 thereafter.
     brain->prescribeControlForActuator("muscle1L",
-            new Constant(100)); // new StepFunction(0.5, 3, 0.3, 1));
+            new Constant(130)); // new StepFunction(0.5, 3, 0.3, 1));
     //brain->prescribeControlForActuator("muscle1L",
     //        new StepFunction(0.5, 3, 0.3, 1));
 
@@ -113,12 +110,68 @@ TwoLink::TwoLink() {
     ConditionalPathPoint* pp1R3 = new ConditionalPathPoint();
     pp1R3->setName("pp1R3");
     pp1R3->setBody(ground);
-    pp1R3->setLocation(*state, Vec3(0.1, 0.1, 0));
+    pp1R3->setLocation(*state, Vec3(0.2, 0.1, 0));
     pp1R3->setCoordinate(*state, model->updCoordinateSet()[0]);
-    pp1R3->setRangeMin(*state, 0.5 * Pi);
+    pp1R3->setRangeMin(*state, 90);
     pp1R3->setRangeMax(*state, Infinity);
     muscle1R->updGeometryPath().updPathPointSet().adoptAndAppend(pp1R3);
     muscle1R->addNewPathPoint("point4", *link1, Vec3(-0.3, -0.1, 0));
+
+/*
+    muscle2L->addNewPathPoint("point1", *link1, Vec3(-0.1, -0.1, 0));
+    ConditionalPathPoint* pp2L2 = new ConditionalPathPoint();
+    pp2L2->setName("pp2L2");
+    pp2L2->setBody(*link1);
+    pp2L2->setLocation(*state, Vec3(-0.1, 0.1, 0));
+    pp2L2->setCoordinate(*state, model->updCoordinateSet()[1]);
+    pp2L2->setRangeMin(*state, -Infinity);
+    pp2L2->setRangeMax(*state, 0.5 * Pi);
+    muscle2L->updGeometryPath().updPathPointSet().adoptAndAppend(pp2L2);
+    ConditionalPathPoint* pp2L3 = new ConditionalPathPoint();
+    pp2L3->setName("pp2L3");
+    pp2L3->setBody(*link1);
+    pp2L3->setLocation(*state, Vec3(0.1, 0.1, 0));
+    pp2L3->setCoordinate(*state, model->updCoordinateSet()[1]);
+    pp2L3->setRangeMin(*state, -Infinity);
+    pp2L3->setRangeMax(*state, 0.0);
+    muscle2L->updGeometryPath().updPathPointSet().adoptAndAppend(pp2L3);
+    ConditionalPathPoint* pp2L4 = new ConditionalPathPoint();
+    pp2L4->setName("pp2L4");
+    pp2L4->setBody(*link1);
+    pp2L4->setLocation(*state, Vec3(0.1, -0.1, 0));
+    pp2L4->setCoordinate(*state, model->updCoordinateSet()[1]);
+    pp2L4->setRangeMin(*state, -Infinity);
+    pp2L4->setRangeMax(*state, -0.5 * Pi);
+    muscle2L->updGeometryPath().updPathPointSet().adoptAndAppend(pp2L4);
+    muscle2L->addNewPathPoint("point5", *link2, Vec3(-0.3, 0.1, 0));
+
+    muscle2R->addNewPathPoint("point1", *link1, Vec3(-0.1, 0.1, 0));
+    ConditionalPathPoint* pp2R2 = new ConditionalPathPoint();
+    pp2R2->setName("pp2R2");
+    pp2R2->setBody(*link1);
+    pp2R2->setLocation(*state, Vec3(-0.1, -0.1, 0));
+    pp2R2->setCoordinate(*state, model->updCoordinateSet()[1]);
+    pp2R2->setRangeMin(*state, -0.5 * Pi);
+    pp2R2->setRangeMax(*state, Infinity);
+    muscle2R->updGeometryPath().updPathPointSet().adoptAndAppend(pp2R2);
+    ConditionalPathPoint* pp2R3 = new ConditionalPathPoint();
+    pp2R3->setName("pp2R3");
+    pp2R3->setBody(*link1);
+    pp2R3->setLocation(*state, Vec3(0.1, -0.1, 0));
+    pp2R3->setCoordinate(*state, model->updCoordinateSet()[1]);
+    pp2R3->setRangeMin(*state, 0.0);
+    pp2R3->setRangeMax(*state, Infinity);
+    muscle2R->updGeometryPath().updPathPointSet().adoptAndAppend(pp2R3);
+    ConditionalPathPoint* pp2R4 = new ConditionalPathPoint();
+    pp2R4->setName("pp2R4");
+    pp2R4->setBody(*link1);
+    pp2R4->setLocation(*state, Vec3(0.1, 0.1, 0));
+    pp2R4->setCoordinate(*state, model->updCoordinateSet()[1]);
+    pp2R4->setRangeMin(*state, 0.5 * Pi);
+    pp2R4->setRangeMax(*state, Infinity);
+    muscle2R->updGeometryPath().updPathPointSet().adoptAndAppend(pp2R4);
+    muscle2R->addNewPathPoint("point5", *link2, Vec3(-0.3, -0.1, 0));
+    */
 
     model->print("mytwolink.osim");
 
