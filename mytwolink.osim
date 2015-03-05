@@ -175,22 +175,28 @@
 						<PathPointSet>
 							<objects>
 								<PathPoint name="point1">
-									<location> -0.1 0.1 0</location>
+									<location> -0.1 -0.1 0</location>
 									<body>ground</body>
 								</PathPoint>
 								<ConditionalPathPoint name="pp1L2">
+									<location> -0.1 0.1 0</location>
+									<body>ground</body>
+									<range> -inf 1.5708</range>
+									<coordinate>shoulder_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<ConditionalPathPoint name="pp1L3">
 									<location> 0.1 0.1 0</location>
 									<body>ground</body>
 									<range> -inf 0</range>
 									<coordinate>shoulder_coord_0</coordinate>
 								</ConditionalPathPoint>
-								<ConditionalPathPoint name="pp1L3">
+								<ConditionalPathPoint name="pp1L4">
 									<location> 0.1 -0.1 0</location>
 									<body>ground</body>
 									<range> -inf -1.5708</range>
 									<coordinate>shoulder_coord_0</coordinate>
 								</ConditionalPathPoint>
-								<PathPoint name="point4">
+								<PathPoint name="point5">
 									<location> -0.3 0.1 0</location>
 									<body>humerus</body>
 								</PathPoint>
@@ -222,22 +228,28 @@
 						<PathPointSet>
 							<objects>
 								<PathPoint name="point1">
-									<location> -0.1 -0.1 0</location>
+									<location> -0.1 0.1 0</location>
 									<body>ground</body>
 								</PathPoint>
 								<ConditionalPathPoint name="pp1R2">
+									<location> -0.1 -0.1 0</location>
+									<body>ground</body>
+									<range> -1.5708 inf</range>
+									<coordinate>shoulder_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<ConditionalPathPoint name="pp1R3">
 									<location> 0.1 -0.1 0</location>
 									<body>ground</body>
 									<range> 0 inf</range>
 									<coordinate>shoulder_coord_0</coordinate>
 								</ConditionalPathPoint>
-								<ConditionalPathPoint name="pp1R3">
-									<location> 0.2 0.1 0</location>
+								<ConditionalPathPoint name="pp1R4">
+									<location> 0.1 0.1 0</location>
 									<body>ground</body>
-									<range> 0 inf</range>
+									<range> 1.5708 inf</range>
 									<coordinate>shoulder_coord_0</coordinate>
 								</ConditionalPathPoint>
-								<PathPoint name="point4">
+								<PathPoint name="point5">
 									<location> -0.3 -0.1 0</location>
 									<body>humerus</body>
 								</PathPoint>
@@ -265,6 +277,38 @@
 				<PathActuator name="muscle2L">
 					<!--The set of points defining the path of the muscle.-->
 					<GeometryPath>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="point1">
+									<location> -0.1 -0.1 0</location>
+									<body>humerus</body>
+								</PathPoint>
+								<ConditionalPathPoint name="pp2L2">
+									<location> -0.1 0.1 0</location>
+									<body>humerus</body>
+									<range> -inf 1.5708</range>
+									<coordinate>elbow_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<ConditionalPathPoint name="pp2L3">
+									<location> 0.1 0.1 0</location>
+									<body>humerus</body>
+									<range> -inf 0</range>
+									<coordinate>elbow_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<ConditionalPathPoint name="pp2L4">
+									<location> 0.1 -0.1 0</location>
+									<body>humerus</body>
+									<range> -inf -1.5708</range>
+									<coordinate>elbow_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<PathPoint name="point5">
+									<location> -0.3 0.1 0</location>
+									<body>radius</body>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
 						<!--Used to display the path in the 3D window-->
 						<VisibleObject name="display">
 							<!--Set of geometry files and associated attributes, allow .vtp, .stl, .obj-->
@@ -286,6 +330,38 @@
 				<PathActuator name="muscle2R">
 					<!--The set of points defining the path of the muscle.-->
 					<GeometryPath>
+						<!--The set of points defining the path-->
+						<PathPointSet>
+							<objects>
+								<PathPoint name="point1">
+									<location> -0.1 0.1 0</location>
+									<body>humerus</body>
+								</PathPoint>
+								<ConditionalPathPoint name="pp2R2">
+									<location> -0.1 -0.1 0</location>
+									<body>humerus</body>
+									<range> -1.5708 inf</range>
+									<coordinate>elbow_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<ConditionalPathPoint name="pp2R3">
+									<location> 0.1 -0.1 0</location>
+									<body>humerus</body>
+									<range> 0 inf</range>
+									<coordinate>elbow_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<ConditionalPathPoint name="pp2R4">
+									<location> 0.1 0.1 0</location>
+									<body>humerus</body>
+									<range> 1.5708 inf</range>
+									<coordinate>elbow_coord_0</coordinate>
+								</ConditionalPathPoint>
+								<PathPoint name="point5">
+									<location> -0.3 -0.1 0</location>
+									<body>radius</body>
+								</PathPoint>
+							</objects>
+							<groups />
+						</PathPointSet>
 						<!--Used to display the path in the 3D window-->
 						<VisibleObject name="display">
 							<!--Set of geometry files and associated attributes, allow .vtp, .stl, .obj-->
@@ -319,21 +395,7 @@
 		</ContactGeometrySet>
 		<!--Controllers in the model.-->
 		<ControllerSet name="Controllers">
-			<objects>
-				<PrescribedController>
-					<!--The list of model actuators that this controller will control.The keyword ALL indicates the controller will controll all the acuators in the model-->
-					<actuator_list>muscle1L</actuator_list>
-					<!--Functions (one per control) describing the controls for actuatorsspecified for this controller.-->
-					<FunctionSet name="ControlFunctions">
-						<objects>
-							<Constant>
-								<value>130</value>
-							</Constant>
-						</objects>
-						<groups />
-					</FunctionSet>
-				</PrescribedController>
-			</objects>
+			<objects />
 			<groups />
 		</ControllerSet>
 		<!--Additional components in the model.-->

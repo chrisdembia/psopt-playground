@@ -318,7 +318,7 @@ int main(void)
 
     opensimTwoLink = new TwoLink();
 
-    return 0; // TODO DEBUG
+    //return 0; // TODO DEBUG
 
     /*
     adouble states[2] = {0, 0};
