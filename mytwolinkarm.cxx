@@ -40,7 +40,7 @@ adouble integrand_cost(adouble* states, adouble* controls,
                        adouble* parameters, adouble& time, adouble* xad, 
                        int iphase)
 {
-    return  0.001 * (pow(controls[0], 2) + pow(controls[1], 2) + pow(controls[2], 2) + pow(controls[3], 2));
+    return 0;// return  0.001 * (pow(controls[0], 2) + pow(controls[1], 2) + pow(controls[2], 2) + pow(controls[3], 2));
 } 
 
 //////////////////////////////////////////////////////////////////////////
@@ -544,6 +544,7 @@ void dae(adouble* derivatives, adouble* path, adouble* states,
     algorithm.nlp_iter_max                = 1000;
     algorithm.nlp_tolerance               = 1.e-6;
     //algorithm.ode_tolerance               = 1.e-4;
+    algorithm.mesh_refinement             = "automatic";
 
 ////////////////////////////////////////////////////////////////////////////
 ///////////////////  Now call PSOPT to solve the problem   /////////////////
